@@ -1,0 +1,31 @@
+{
+  "name": "fontmirror",
+  "version": "0.0.1",
+  "description": "mirror",
+  "main": "lib/main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loveencounterflow/fontmirror.git"
+  },
+  "keywords": [
+    "font",
+    "mirror",
+    "ttf",
+    "otf",
+    "svg",
+    "pathdata",
+    "outline"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/loveencounterflow/fontmirror/issues"
+  },
+  "homepage": "https://github.com/loveencounterflow/fontmirror#readme"
+}
