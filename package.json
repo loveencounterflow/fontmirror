@@ -1,7 +1,7 @@
 {
   "name": "fontmirror",
   "version": "0.0.1",
-  "description": "mirror",
+  "description": "cache outlines of fonts as scaled SVG pathdata strings",
   "main": "lib/main.js",
   "directories": {
     "lib": "lib"
@@ -27,5 +27,13 @@
   "bugs": {
     "url": "https://github.com/loveencounterflow/fontmirror/issues"
   },
-  "homepage": "https://github.com/loveencounterflow/fontmirror#readme"
+  "homepage": "https://github.com/loveencounterflow/fontmirror#readme",
+  "dependencies": {
+    "cnd": "^4.6.0",
+    "glob": "^7.1.5",
+    "intertype": "^2.5.0",
+    "multimix": "^2.1.0",
+    "opentype.js": "^1.1.0",
+    "yargs": "^14.2.0"
+  }
 }
