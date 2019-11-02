@@ -74,18 +74,18 @@ path_precision            = 3
     descender:    me.descender,
     glyphs:       glyphs }
 
-#-----------------------------------------------------------------------------------------------------------
-@_find_ideographic_advance_factor = ( otjsfont ) ->
-  ### In some fonts, the advance width of CJK ideographs differs from the font design size; this is
-  especially true for fonts from the `cwTeXQ` series. This routine probes the font with a number of CJK
-  codepoints and returns the ratio of the font design size and the advance width of the first CJK glyph.
-  The function always returns 1 for fonts that do not contain CJK characters. ###
-  probe = Array.from '一丁乘㐀㑔㙜𠀀𠀁𠀈𪜵𪝘𪜲𫝀𫝄𫠢𫡄𫡦𬺰𬻂'
-  for chr in probe
-    cid = chr.codePointAt 0
-    continue unless ( glyph = @glyph_from_cid otjsfont, cid )?
-    return otjsfont.unitsPerEm / glyph.advanceWidth
-  return 1
+# #-----------------------------------------------------------------------------------------------------------
+# @_find_ideographic_advance_factor = ( otjsfont ) ->
+#   ### In some fonts, the advance width of CJK ideographs differs from the font design size; this is
+#   especially true for fonts from the `cwTeXQ` series. This routine probes the font with a number of CJK
+#   codepoints and returns the ratio of the font design size and the advance width of the first CJK glyph.
+#   The function always returns 1 for fonts that do not contain CJK characters. ###
+#   probe = Array.from '一丁乘㐀㑔㙜𠀀𠀁𠀈𪜵𪝘𪜲𫝀𫝄𫠢𫡄𫡦𬺰𬻂'
+#   for chr in probe
+#     cid = chr.codePointAt 0
+#     continue unless ( glyph = @glyph_from_cid otjsfont, cid )?
+#     return otjsfont.unitsPerEm / glyph.advanceWidth
+#   return 1
 
 
 
@@ -94,26 +94,27 @@ path_precision            = 3
 #-----------------------------------------------------------------------------------------------------------
 @otjsfont_from_path = ( path ) -> OT.loadSync path
 
-#-----------------------------------------------------------------------------------------------------------
-@save_otjsfont = ( path, otjsfont ) ->
-  # FS.writeFileSync path, buffer = otjsfont.toBuffer() # deprecated
-  # buffer = Buffer.from otjsfont.toArrayBuffer()
-  buffer = Buffer.from @_otjsfont_toArrayBuffer otjsfont
-  FS.writeFileSync path, buffer
-  return buffer.length
+# #-----------------------------------------------------------------------------------------------------------
+# @save_otjsfont = ( path, otjsfont ) ->
+#   # FS.writeFileSync path, buffer = otjsfont.toBuffer() # deprecated
+#   # buffer = Buffer.from otjsfont.toArrayBuffer()
+#   buffer = Buffer.from @_otjsfont_toArrayBuffer otjsfont
+#   FS.writeFileSync path, buffer
+#   return buffer.length
 
-@_otjsfont_toArrayBuffer = ( otjsfont ) ->
-  sfntTable = otjsfont.toTables();
-  bytes     = sfntTable.encode();
-  buffer    = new ArrayBuffer(bytes.length);
-  intArray  = new Uint8Array(buffer);
-  ```
-  for (let i = 0; i < bytes.length; i++) {
-      intArray[i] = bytes[i];
-  }
-  ```
-  return buffer;
+# @_otjsfont_toArrayBuffer = ( otjsfont ) ->
+#   sfntTable = otjsfont.toTables();
+#   bytes     = sfntTable.encode();
+#   buffer    = new ArrayBuffer(bytes.length);
+#   intArray  = new Uint8Array(buffer);
+#   ```
+#   for (let i = 0; i < bytes.length; i++) {
+#       intArray[i] = bytes[i];
+#   }
+#   ```
+#   return buffer;
 
+###
 #-----------------------------------------------------------------------------------------------------------
 @list_glyphs_in_otjsfont = ( otjsfont ) ->
   R = new Set()
@@ -132,6 +133,7 @@ path_precision            = 3
       R.add String.fromCodePoint cid
   #.........................................................................................................
   return [ R... ].sort()
+###
 
 #-----------------------------------------------------------------------------------------------------------
 @svg_path_from_cid = ( otjsfont, cid ) ->
@@ -203,53 +205,45 @@ path_precision            = 3
       else throw new Error "^svgttf#2231 unknown SVG path element #{rpr type}"
   return R
 
-###
+
 #-----------------------------------------------------------------------------------------------------------
-@get_fallback_glyph = ( me, shape = 'square' ) ->
-  # validate.svgttf_metrics me
-  '❶❷❸❹❺❻❼❽❾❿'
-  validate.nonempty_text shape
+@_insert_into_table_outlines = ( me, known_hashes, fontnick, glyphrows ) ->
+  ### NOTE to be called once for each font with all or some cid_ranges ###
+  outlines_data     = []
+  content_data      = []
+  progress_count    = 100 ### output progress whenever multiple of this number reached ###
+  # fragment insert_into_outlines_first(): insert into outlines ( iclabel, fontnick, pathdata ) values
   #.........................................................................................................
-  width         = 3 * me.em_size // 4
-  x0            = me.em_size // 8
-  x1            = x0 + width
-  y0            = 0
-  y1            = width
-  path          = new OT.Path()
+  ### TAINT refactor ###
+  SVGTTF_font                 = {}
+  SVGTTF_font.nick            = fontnick
+  SVGTTF_font.path            = @filepath_from_fontnick me, fontnick
+  SVGTTF_font.metrics         = SVGTTF.new_metrics()
+  try
+    SVGTTF_font.otjsfont        = SVGTTF.otjsfont_from_path SVGTTF_font.path
+  catch error
+    warn "^ucdb@1012^ when trying to open font #{rpr fontnick}, an error occurred: #{error.message}"
+    return null
+  # return null
+  SVGTTF_font.advance_factor  = SVGTTF_font.metrics.em_size / SVGTTF_font.otjsfont.unitsPerEm
+  XXX_advance_scale_factor    = SVGTTF_font.advance_factor * ( SVGTTF_font.metrics.global_glyph_scale ? 1 )
   #.........................................................................................................
-  switch shape
-    when 'square'
-      path.moveTo x0, y0
-      path.lineTo x1, y0
-      path.lineTo x1, y1
-      path.lineTo x0, y1
-      path.close()
-    when 'uptriangle'
-      xm = ( x0 + x1 ) // 2
-      path.moveTo x0, y0
-      path.lineTo x1, y0
-      path.lineTo xm, y1
-      path.close()
-    when 'round'
-      xm = ( x0 + x1 ) // 2
-      ym = ( y0 + y1 ) // 2
-      path.moveTo   xm, y0
-      path.quadTo   x1, y0, x1, ym
-      path.quadTo   x1, y1, xm, y1
-      path.quadTo   x0, y1, x0, ym
-      path.quadTo   x0, y0, xm, y0
-      path.close()
-    else throw new Error "^svgttf#3391 unknown shape #{rpr shape}"
+  false_fallback_pathdata = @_get_false_fallback_pathdata_from_SVGTTF_font me, SVGTTF_font
+  if false_fallback_pathdata?
+    warn '^ucdb@6374445^', "filtering codepoints with outlines that look like fallback (placeholder glyph)"
   #.........................................................................................................
-  name          = '.notdef'
-  unicode       = 0
-  advanceWidth  = me.em_size
-  return new OT.Glyph { name, unicode, advanceWidth, path, }
-###
-
-
-
-
-
-
+  for { iclabel, cid, glyph, } from cast.iterator glyphrows
+    d = SVGTTF.glyph_and_pathdata_from_cid SVGTTF_font.metrics, SVGTTF_font.otjsfont, cid
+    continue if ( not d? ) or ( false_fallback_pathdata? and ( d.pathdata is false_fallback_pathdata ) )
+    whisper '^ucdb@1013^', me._outline_count - 1 if ( me._outline_count++ % progress_count ) is 0
+    advance           = d.glyph.advanceWidth * XXX_advance_scale_factor
+    ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
+    if ( isa.nan advance ) or ( advance is 0 )
+      ### TAINT code repetition ###
+      cid_hex = '0x' + ( cid.toString 16 ).padStart 4, '0'
+      warn "^ucdb@3332^ illegal advance for #{SVGTTF_font.nick} #{cid_hex}: #{rpr advance}; setting to 1"
+      advance           = 1
+    ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
+    content           = jr { advance, pathdata: d.pathdata, }
+    hash              = MIRAGE.sha1sum_from_text content
 
