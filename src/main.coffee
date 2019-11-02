@@ -40,6 +40,24 @@ Multimix                  = require 'multimix'
 
 #-----------------------------------------------------------------------------------------------------------
 @new_job = ( source_path, target_path, force_overwrite ) ->
+  # fonts_home  = project_abspath '.', 'font-sources'
+  # pattern     = fonts_home + '/**/*'
+  # settings    = { matchBase: true, follow: true, stat:true, }
+  # R           = {}
+  # info "^ucdb@1003^ building font cache..."
+  # globber     = new _glob.Glob pattern, settings, ( error, filepaths ) =>
+  #   return reject error if error?
+  #   info "^ucdb@1004^ found #{filepaths.length} files"
+  #   for filepath in filepaths
+  #     unless ( stat = globber.statCache[ filepath ] )?
+  #       ### TAINT stat missing file instead of throwing error ###
+  #       return reject new Error "^77464^ not found in statCache: #{rpr filepath}"
+  #     filename      = PATH.basename filepath
+  #     continue if R[ filename ]?
+  #     filesize      = stat.size
+  #     R[ filename ] = { filepath, filesize, }
+  #   resolve R
+  ### TAINT may want to configure Glob as shown above ###
   source_path  = PATH.resolve source_path
   target_path  = PATH.resolve target_path
   #.........................................................................................................
