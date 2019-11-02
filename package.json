@@ -30,11 +30,12 @@
   "homepage": "https://github.com/loveencounterflow/fontmirror#readme",
   "dependencies": {
     "cnd": "^4.6.0",
+    "commander": "^4.0.0",
     "glob": "^7.1.5",
     "intertype": "^2.5.0",
     "mkdirp": "^0.5.1",
     "multimix": "^2.1.0",
     "opentype.js": "^1.1.0",
-    "yargs": "^14.2.0"
+    "steampipes": "^3.0.1"
   }
 }
