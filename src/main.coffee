@@ -71,7 +71,7 @@ Multimix                  = require 'multimix'
   unless isa.fontmirror_existing_folder target_path
     throw new Error "^fontmirror@445^ expected path to existing folder, got #{rpr target_path}"
   #.........................................................................................................
-  return { source_path, target_path, source_paths, force_overwrite, }
+  return { source_path, target_path, source_paths, force_overwrite, outline_count: 0, }
 
 #-----------------------------------------------------------------------------------------------------------
 @_is_cached = ( me, target_path ) -> isa.fontmirror_existing_file target_path
@@ -82,15 +82,16 @@ Multimix                  = require 'multimix'
   directory ###
   me = @new_job source_path, target_path, force_overwrite
   for source_path in me.source_paths
-    continue unless ( source_path.match /F\.TTF$/ )?
+    # continue unless ( source_path.match /F\.TTF$/ )?
+    continue unless ( source_path.match /BabelStoneHan\.ttf$/ )? ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
     source_relpath  = PATH.relative process.cwd(), source_path
     source          = { path: source_path, relpath: source_relpath, }
     content_hash    = @_content_hash_from_path me, source.path
     target_path     = PATH.join me.target_path, content_hash
     if ( not me.force_overwrite ) and @_is_cached me, target_path
-      whisper "cached: #{source.relpath}"
+      whisper "cached: #{content_hash} #{source.relpath}"
       continue
-    whisper "not cached: #{source.relpath}"
+    whisper "not cached: #{content_hash} #{source.relpath}"
     await @_write_font_outlines me, source, target_path
   return null
 
@@ -107,6 +108,7 @@ Multimix                  = require 'multimix'
   app.parse(process.argv);
   return null
 
+
 #===========================================================================================================
 #
 #-----------------------------------------------------------------------------------------------------------
@@ -114,6 +116,7 @@ MAIN = @
 class Fontmirror extends Multimix
   @include MAIN,                            { overwrite: false, }
   @include ( require './outliner.mixin' ),  { overwrite: false, }
+  @include ( require './_temp_svgttf' ),  { overwrite: false, } ### !!!!!!!!!!!!!!!!!!!!!!!!!!! ###
   # @extend MAIN, { overwrite: false, }
 
 module.exports = FONTMIRROR = new Fontmirror()
