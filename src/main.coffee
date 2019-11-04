@@ -34,6 +34,9 @@ PATH                      = require 'path'
 glob                      = require 'glob'
 require                   './exception-handler'
 Multimix                  = require 'multimix'
+TEXFONTNAMESAKE           = require './texfontnamesake'
+fontfile_extensions       = 'otf|ttf|woff|woff2|ttc'
+# 'eot|svg'
 
 #-----------------------------------------------------------------------------------------------------------
 @_content_hash_from_path = ( me, path ) -> CND.id_from_route path, 17
