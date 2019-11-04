@@ -43,7 +43,7 @@ FS                        = require 'fs'
 #-----------------------------------------------------------------------------------------------------------
 @declare 'fontmirror_existing_folder', tests:
   "x is a nonempty_text":                   ( x ) -> @isa.nonempty_text x
-  "x points to existing file":              ( x ) ->
+  "x points to existing folder":            ( x ) ->
     try return ( FS.statSync x ).isDirectory() catch error then return false
 
 # #-----------------------------------------------------------------------------------------------------------
