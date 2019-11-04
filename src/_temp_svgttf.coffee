@@ -194,14 +194,17 @@ OT                        = require 'opentype.js'
   ### Yield one commented line to show the path to the file cached; this also makes sure a file will exist
   in the cache even if no outlines were obtained so we can avoid re-openening the font whenever cache
   is amended without `force_overwrite`: ###
-  description                 = { fontnick: source.fontnick, source_path: source.path, }
+  { fontnick
+    path
+    relpath }                 = source
+  description                 = { key: '^new-font', fontnick, path, }
   yield "#{jr description}\n"
-  return unless ( otjsfont = @_open_font source.path, source.relpath )?
+  return unless ( otjsfont = @_open_font path, source.relpath )?
   progress_count              = 100 ### output progress whenever multiple of this number reached ###
   SVGTTF_font                 = {}
   SVGTTF_font.otjsfont        = otjsfont
-  SVGTTF_font.path            = source.path
-  SVGTTF_font.relpath         = source.relpath
+  SVGTTF_font.path            = path
+  SVGTTF_font.relpath         = relpath
   SVGTTF_font.metrics         = metrics = @new_metrics()
   SVGTTF_font.advance_factor  = SVGTTF_font.metrics.em_size / SVGTTF_font.otjsfont.unitsPerEm
   XXX_advance_scale_factor    = SVGTTF_font.advance_factor * ( SVGTTF_font.metrics.global_glyph_scale ? 1 )

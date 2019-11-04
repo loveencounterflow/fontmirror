@@ -53,8 +53,7 @@ line_pattern              = ///
   for cache_path in cache_paths
     for line from @_walk_file_lines cache_path
       if line.startsWith '{'
-        { source_path, } = JSON.parse line
-        yield { key: '^new-font', path: source_path, }
+        yield JSON.parse line
       else
         continue unless ( match = line.match line_pattern )?
         { cid_hex
