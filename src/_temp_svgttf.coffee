@@ -224,6 +224,6 @@ OT                        = require 'opentype.js'
       warn "^ucdb@3332^ illegal advance for #{SVGTTF_font.nick} #{cid_hex}: #{rpr advance}; setting to 1"
       advance           = 1
     ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
-    outline_json = jr { advance, pathdata, }
-    yield "#{cid_hex},#{glyph},#{outline_json}\n"
+    pathdata_json = jr pathdata
+    yield "#{cid_hex},#{glyph},#{advance},#{pathdata_json}\n"
 
