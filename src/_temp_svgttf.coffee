@@ -194,7 +194,7 @@ OT                        = require 'opentype.js'
   ### Yield one commented line to show the path to the file cached; this also makes sure a file will exist
   in the cache even if no outlines were obtained so we can avoid re-openening the font whenever cache
   is amended without `force_overwrite`: ###
-  description = { source_path: source.path, }
+  description                 = { fontnick: source.fontnick, source_path: source.path, }
   yield "#{jr description}\n"
   return unless ( otjsfont = @_open_font source.path, source.relpath )?
   progress_count              = 100 ### output progress whenever multiple of this number reached ###
