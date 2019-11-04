@@ -128,8 +128,8 @@ OT                        = require 'opentype.js'
 #-----------------------------------------------------------------------------------------------------------
 @new_metrics = ->
   R =
-    # em_size:          4096  ### a.k.a. design size, grid size ###
-    em_size:          1000  ### a.k.a. design size, grid size ###
+    em_size:          4096  ### a.k.a. design size, grid size ###
+    # em_size:          1000  ### a.k.a. design size, grid size ###
     font_size:        360   ### in pixels ###
     scale_factor:     null
     # ### TAINT magic number
