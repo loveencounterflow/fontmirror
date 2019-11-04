@@ -212,7 +212,39 @@ OT                        = require 'opentype.js'
   fallback_pathdata = null
   # false_fallback_pathdata = @_get_false_fallback_pathdata_from_SVGTTF_font me, SVGTTF_font
   #.........................................................................................................
-  for cid in [ 0x4e00 .. 0x4e02 ]
+  ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
+  cids = []
+  # cids = [ cids..., [ 0x4e00 .. 0x4e03 ]..., ]
+  # cids = [ cids..., 0x9fff, ]
+  # cids = [ cids..., 0xfffd, 0xfffe, 0xffff, ]
+
+  cids = [ cids..., [ 0x01 .. 0xff ]..., ]
+  cids = [ cids..., 0x004e00, ] # A:uc0---:004e00:一
+  cids = [ cids..., 0x004e01, ] # A:uc0---:004e01:丁
+  cids = [ cids..., 0x004e02, ] # A:uc0---:004e02:丂
+  cids = [ cids..., 0x004e03, ] # A:uc0---:004e03:七
+  cids = [ cids..., 0x004e04, ] # A:uc0---:004e04:丄
+  cids = [ cids..., 0x004e05, ] # A:uc0---:004e05:丅
+  cids = [ cids..., 0x004e07, ] # A:uc0---:004e07:万
+  cids = [ cids..., 0x004df0, ] # A:ucyijg:004df0:䷰
+  cids = [ cids..., 0x004df1, ] # A:ucyijg:004df1:䷱
+  cids = [ cids..., 0x004df2, ] # A:ucyijg:004df2:䷲
+  cids = [ cids..., 0x00243f, ] # A:u-----:00243f:
+  cids = [ cids..., 0x00245f, ] # A:u-----:00245f:
+  cids = [ cids..., 0x00fdd0, ] # A:u-----:00fdd0:
+  cids = [ cids..., 0x00fdd1, ] # A:u-----:00fdd1:
+  cids = [ cids..., 0x00fdd2, ] # A:u-----:00fdd2:
+  cids = [ cids..., 0x00fffd, ] # A:u-----:00fffd:�
+  cids = [ cids..., 0x00fffe, ] # A:u-----:00fffe:
+  cids = [ cids..., 0x00ffff, ] # A:u-----:00ffff:
+  cids = [ cids..., 0x030000, ] # A:u-----:030000:
+  cids = [ cids..., 0x10fffe, ] # A:u-----:10fffe:
+  cids = [ cids..., 0x10ffff, ] # A:u-----:10ffff:
+  cids = [ cids..., 0x009fff, ] # A:uc0---:009fff:
+  cids = [ ( new Set cids )..., ]
+  ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
+  #.........................................................................................................
+  for cid in cids
     cid_hex     = '0x' + ( cid.toString 16 ).padStart 4, '0'
     glyph       = String.fromCodePoint cid
     d           = @_get_otjsglyph_and_pathdata me, SVGTTF_font, cid, glyph
@@ -229,4 +261,8 @@ OT                        = require 'opentype.js'
     ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
     pathdata_json = jr pathdata
     yield "#{cid_hex},#{glyph},#{advance},#{pathdata_json}\n"
+  #.........................................................................................................
+  return null
+
+
 
