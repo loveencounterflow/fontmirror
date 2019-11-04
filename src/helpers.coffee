@@ -7,7 +7,7 @@
 ############################################################################################################
 CND                       = require 'cnd'
 rpr                       = CND.rpr
-badge                     = 'UCDB/HELPERS'
+badge                     = 'FONTMIRROR/HELPERS'
 log                       = CND.get_logger 'plain',     badge
 debug                     = CND.get_logger 'debug',     badge
 info                      = CND.get_logger 'info',      badge
@@ -128,8 +128,4 @@ types                     = require './types'
 @SQL_generate_values_tuple = ( values ) ->
   validate.list values
   return '( ' + ( ( @SQL_escape_value x for x in values ).join ', ' ) + ' )'
-
-
-
-
 
