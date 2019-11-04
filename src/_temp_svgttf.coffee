@@ -209,7 +209,7 @@ OT                        = require 'opentype.js'
   fallback_pathdata = null
   # false_fallback_pathdata = @_get_false_fallback_pathdata_from_SVGTTF_font me, SVGTTF_font
   #.........................................................................................................
-  for cid in [ 0x4e00 .. 0x4eff ]
+  for cid in [ 0x4e00 .. 0x4e02 ]
     cid_hex     = '0x' + ( cid.toString 16 ).padStart 4, '0'
     glyph       = String.fromCodePoint cid
     d           = @_get_otjsglyph_and_pathdata me, SVGTTF_font, cid, glyph
