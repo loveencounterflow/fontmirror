@@ -129,6 +129,6 @@ module.exports = FONTMIRROR = new Fontmirror()
 
 
 ############################################################################################################
-if require.main is module then do => FONTMIRROR.main()
+if require.main is module then do => FONTMIRROR.cli()
 
 
