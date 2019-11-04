@@ -83,8 +83,18 @@ fontfile_extensions       = 'otf|ttf|woff|woff2|ttc'
   # iosevkaːslabːthinːttf
   # thːtshynːpːoneːttf
   # wenːyueːguːdianːmingːchaoːtiːncːwːfiveːːoneːotf has fallback image? at 乸, but correctly missing glyphs othwerwise
-  XXX_includes = """andːregularːotf andːregularːttf lastːresortːttf
-    sunːextaːttf thːtshynːpːoneːttf dejaːvuːsansːmonoːboldːobliqueːttf babelːstoneːhanːttf"""
+  XXX_includes = """
+    andːregularːotf
+    andːregularːttf
+    babelːstoneːhanːttf
+    dejaːvuːsansːmonoːboldːobliqueːttf
+    iosevkaːslabːthinːttf
+    lastːresortːttf
+    sunːextaːttf
+    thːtshynːpːoneːttf
+    thːtshynːpːoneːttf
+    wenːyueːguːdianːmingːchaoːtiːncːwːfiveːːoneːotf
+    """
   if XXX_includes?
     XXX_includes = XXX_includes.split /\s+/
     XXX_includes = XXX_includes.filter ( x ) -> x isnt ''
