@@ -118,9 +118,10 @@ fontfile_extensions       = 'otf|ttf|woff|woff2|ttc'
 #-----------------------------------------------------------------------------------------------------------
 MAIN = @
 class Fontmirror extends Multimix
-  @include MAIN,                            { overwrite: false, }
-  @include ( require './outliner.mixin' ),  { overwrite: false, }
-  @include ( require './_temp_svgttf' ),  { overwrite: false, } ### !!!!!!!!!!!!!!!!!!!!!!!!!!! ###
+  @include MAIN,                              { overwrite: false, }
+  @include ( require './outliner.mixin' ),    { overwrite: false, }
+  @include ( require './cachewalker.mixin' ), { overwrite: false, }
+  @include ( require './_temp_svgttf' ),      { overwrite: false, } ### !!!!!!!!!!!!!!!!!!!!!!!!!!! ###
   # @extend MAIN, { overwrite: false, }
 
 module.exports = FONTMIRROR = new Fontmirror()
