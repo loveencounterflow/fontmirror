@@ -49,18 +49,30 @@ line_pattern              = ///
   validate.fontmirror_existing_folder XXX_target_path
   cache_pattern   = PATH.join XXX_target_path, '*'
   cache_paths     = glob.sync cache_pattern
+  #.........................................................................................................
+  # signal SOT:
   yield { key: '^first', }
+  #.........................................................................................................
   for cache_path in cache_paths
     for line from @_walk_file_lines cache_path
+      #.....................................................................................................
+      # yield embedded JSON objects:
       if line.startsWith '{'
         yield JSON.parse line
-      else
-        continue unless ( match = line.match line_pattern )?
-        { cid_hex
-          glyph
-          advance
-          pathdata  } = match.groups
-        yield { key: '^outline', cid_hex, glyph, advance, pathdata, }
+        continue
+      #.....................................................................................................
+      # silently skip unrecognized lines:
+      unless ( match = line.match line_pattern )?
+        continue
+      #.....................................................................................................
+      # assemble `^outline` datoms for the majority of lines:
+      { cid_hex
+        glyph
+        advance
+        pathdata  } = match.groups
+      yield { key: '^outline', cid_hex, glyph, advance, pathdata, }
+  #.........................................................................................................
+  # signal EOT:
   yield { key: '^last', }
   return null
 
