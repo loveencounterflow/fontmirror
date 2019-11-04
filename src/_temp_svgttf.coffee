@@ -6,7 +6,7 @@
 ############################################################################################################
 CND                       = require 'cnd'
 rpr                       = CND.rpr.bind CND
-badge                     = 'SVGTTF/MAIN'
+badge                     = 'FONTMIRROR/_TEMP_SVGTTF'
 log                       = CND.get_logger 'plain',   badge
 info                      = CND.get_logger 'info',    badge
 alert                     = CND.get_logger 'alert',   badge
