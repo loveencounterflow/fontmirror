@@ -70,21 +70,37 @@ fontfile_extensions       = 'otf|ttf|woff|woff2|ttc'
   directory ###
   me = @new_job source_path, target_path, force_overwrite
   for source_path in me.source_paths
-    # continue unless ( source_path.match /F\.TTF$/ )?
-    continue unless ( source_path.match /BabelStoneHan\.ttf$/ )? ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
+    filename                    = PATH.basename source_path
+    fontnick                    = TEXFONTNAMESAKE.escape filename
+    ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
+    XXX_includes = null
+    # _andregularttf
+    # _dejavusansmonoboldobliquettf
+    # _iosevkaslabthinttf
+    # _lastresortttf
+    # _thtshynp1ttf
+    XXX_includes = """sunːextaːttf"""
+    if XXX_includes?
+      XXX_includes = XXX_includes.split /\s+/
+      XXX_includes = XXX_includes.filter ( x ) -> x isnt ''
+    continue if XXX_includes? and fontnick not in XXX_includes
+    ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
     source_relpath  = PATH.relative process.cwd(), source_path
-    source          = { path: source_path, relpath: source_relpath, }
+    source          = { path: source_path, relpath: source_relpath, fontnick, }
     content_hash    = @_content_hash_from_path me, source.path
     target_path     = PATH.join me.target_path, content_hash
-    if ( not me.force_overwrite ) and @_is_cached me, target_path
-      whisper "cached: #{content_hash} #{source.relpath}"
-      continue
-    whisper "not cached: #{content_hash} #{source.relpath}"
+    if @_is_cached me, target_path
+      if not me.force_overwrite
+        help "skipping:    #{content_hash} #{source.fontnick}"
+        continue
+      urge "overwriting: #{content_hash} #{source.fontnick}"
+    else
+      info "new:         #{content_hash} #{source.fontnick}"
     await @_write_font_outlines me, source, target_path
   return null
 
 #-----------------------------------------------------------------------------------------------------------
-@main = ->
+@cli = ->
   app = require 'commander'
   app
     .version ( require '../package.json' ).version
