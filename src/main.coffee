@@ -69,20 +69,30 @@ fontfile_extensions       = 'otf|ttf|woff|woff2|ttc'
   ### source must be an existing font file or a directory of font files; target must be an existing
   directory ###
   me = @new_job source_path, target_path, force_overwrite
+  ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
+  XXX_includes = null
+  # andːregularːotf     !!! intentional fallback glyph font
+  # andːregularːttf     !!! intentional fallback glyph font
+  # lastːresortːttf     !!! intentional fallback glyph font
+  #
+  # �￾￿￯
+  # '�￾￿' 0xfffd, 0xfffe, 0xffff
+  # '﷐﷑﷒﷓﷔﷕﷖﷗﷘﷙﷚﷛﷜﷝﷞﷟﷠﷡﷢﷣﷤﷥﷦﷧﷨﷩﷪﷫﷬﷭﷮﷯' 0xfdd0..0xfdef non-characters
+  # '鿿' 0x9fff unassigned
+  # dejaːvuːsansːmonoːboldːobliqueːttf
+  # iosevkaːslabːthinːttf
+  # thːtshynːpːoneːttf
+  # wenːyueːguːdianːmingːchaoːtiːncːwːfiveːːoneːotf has fallback image? at 乸, but correctly missing glyphs othwerwise
+  XXX_includes = """andːregularːotf andːregularːttf lastːresortːttf
+    sunːextaːttf thːtshynːpːoneːttf dejaːvuːsansːmonoːboldːobliqueːttf babelːstoneːhanːttf"""
+  if XXX_includes?
+    XXX_includes = XXX_includes.split /\s+/
+    XXX_includes = XXX_includes.filter ( x ) -> x isnt ''
+  ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
   for source_path in me.source_paths
     filename                    = PATH.basename source_path
     fontnick                    = TEXFONTNAMESAKE.escape filename
     ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
-    XXX_includes = null
-    # _andregularttf
-    # _dejavusansmonoboldobliquettf
-    # _iosevkaslabthinttf
-    # _lastresortttf
-    # _thtshynp1ttf
-    XXX_includes = """sunːextaːttf"""
-    if XXX_includes?
-      XXX_includes = XXX_includes.split /\s+/
-      XXX_includes = XXX_includes.filter ( x ) -> x isnt ''
     continue if XXX_includes? and fontnick not in XXX_includes
     ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
     source_relpath  = PATH.relative process.cwd(), source_path
