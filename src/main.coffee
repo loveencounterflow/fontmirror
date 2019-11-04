@@ -43,31 +43,16 @@ fontfile_extensions       = 'otf|ttf|woff|woff2|ttc'
 
 #-----------------------------------------------------------------------------------------------------------
 @new_job = ( source_path, target_path, force_overwrite ) ->
-  # fonts_home  = project_abspath '.', 'font-sources'
-  # pattern     = fonts_home + '/**/*'
-  # settings    = { matchBase: true, follow: true, stat:true, }
-  # R           = {}
-  # info "^ucdb@1003^ building font cache..."
-  # globber     = new _glob.Glob pattern, settings, ( error, filepaths ) =>
-  #   return reject error if error?
-  #   info "^ucdb@1004^ found #{filepaths.length} files"
-  #   for filepath in filepaths
-  #     unless ( stat = globber.statCache[ filepath ] )?
-  #       ### TAINT stat missing file instead of throwing error ###
-  #       return reject new Error "^77464^ not found in statCache: #{rpr filepath}"
-  #     filename      = PATH.basename filepath
-  #     continue if R[ filename ]?
-  #     filesize      = stat.size
-  #     R[ filename ] = { filepath, filesize, }
-  #   resolve R
-  ### TAINT may want to configure Glob as shown above ###
-  source_path  = PATH.resolve source_path
-  target_path  = PATH.resolve target_path
+  source_path   = PATH.resolve source_path
+  target_path   = PATH.resolve target_path
+  glob_settings = { matchBase: true, follow: true, nocase: true, }
+  glob_pattern  = PATH.join source_path, "/**/*.+(#{fontfile_extensions})"
+  help "^fontmirror@4452^ matching against #{glob_pattern}"
   #.........................................................................................................
   if isa.fontmirror_existing_file source_path
     source_paths = [ source_path, ]
   else if isa.fontmirror_existing_folder source_path
-    source_paths = glob.sync PATH.join source_path, '/**/*'
+    source_paths = glob.sync glob_pattern, glob_settings
   else
     throw new Error "^445552^ expected path to existing file or folder, got #{rpr source_path}"
   #.........................................................................................................
