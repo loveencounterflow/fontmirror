@@ -16,12 +16,11 @@ urge                      = CND.get_logger 'urge',      badge
 echo                      = CND.echo.bind CND
 #...........................................................................................................
 FS                        = require 'fs'
-types                     = require './types'
 #...........................................................................................................
 { isa
   validate
   cast
-  type_of }               = types
+  type_of }               = require './types'
 #...........................................................................................................
 # require                   './exception-handler'
 #...........................................................................................................
@@ -29,7 +28,8 @@ SP                        = require 'steampipes'
 { $
   $async
   $watch
-  $show  }                = SP.export()
+  $show
+  $drain }                = SP.export()
 { jr, }                   = CND
 
 
@@ -55,7 +55,7 @@ SP                        = require 'steampipes'
   pipeline.push $watch ( d ) -> line_count++
   # pipeline.push SP.tee_write_to_file path
   pipeline.push SP.tee_write_to_file_sync target_path
-  pipeline.push SP.$drain =>
+  pipeline.push $drain =>
     resolve line_count
   SP.pull pipeline...
   return null
