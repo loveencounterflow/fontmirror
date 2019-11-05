@@ -70,7 +70,7 @@ fontfile_extensions       = 'otf|ttf|woff|woff2|ttc'
   directory ###
   me = @new_job source_path, target_path, force_overwrite
   ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
-  XXX_includes = null
+  XXX_excludes = null
   # andːregularːotf     !!! intentional fallback glyph font
   # andːregularːttf     !!! intentional fallback glyph font
   # lastːresortːttf     !!! intentional fallback glyph font
@@ -83,27 +83,28 @@ fontfile_extensions       = 'otf|ttf|woff|woff2|ttc'
   # iosevkaːslabːthinːttf
   # thːtshynːpːoneːttf
   # wenːyueːguːdianːmingːchaoːtiːncːwːfiveːːoneːotf has fallback image? at 乸, but correctly missing glyphs othwerwise
-  XXX_includes = """
+    # babelːstoneːhanːttf
+    # dejaːvuːsansːmonoːboldːobliqueːttf
+    # iosevkaːslabːthinːttf
+    # sunːextaːttf
+    # thːtshynːpːoneːttf
+    # thːtshynːpːoneːttf
+    # wenːyueːguːdianːmingːchaoːtiːncːwːfiveːːoneːotf
+  XXX_excludes = """
     andːregularːotf
     andːregularːttf
-    babelːstoneːhanːttf
-    dejaːvuːsansːmonoːboldːobliqueːttf
-    iosevkaːslabːthinːttf
     lastːresortːttf
-    sunːextaːttf
-    thːtshynːpːoneːttf
-    thːtshynːpːoneːttf
-    wenːyueːguːdianːmingːchaoːtiːncːwːfiveːːoneːotf
+    droidːsansːfallbackːfullːttf
     """
-  if XXX_includes?
-    XXX_includes = XXX_includes.split /\s+/
-    XXX_includes = XXX_includes.filter ( x ) -> x isnt ''
+  if XXX_excludes?
+    XXX_excludes = XXX_excludes.split /\s+/
+    XXX_excludes = XXX_excludes.filter ( x ) -> x isnt ''
   ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
   for source_path in me.source_paths
     filename                    = PATH.basename source_path
     fontnick                    = TEXFONTNAMESAKE.escape filename
     ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
-    continue if XXX_includes? and fontnick not in XXX_includes
+    continue if XXX_excludes? and fontnick in XXX_excludes
     ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
     source_relpath  = PATH.relative process.cwd(), source_path
     source          = { path: source_path, relpath: source_relpath, fontnick, }
