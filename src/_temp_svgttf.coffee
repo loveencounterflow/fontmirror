@@ -37,7 +37,25 @@ OT                        = require 'opentype.js'
 
 
 #===========================================================================================================
-# METRICS
+#
+#-----------------------------------------------------------------------------------------------------------
+@new_font = ( me, source ) ->
+  { fontnick
+    path
+    relpath } = source
+  otjsfont    = @_open_font path, source.relpath
+  if otjsfont? then metrics = @new_metrics otjsfont
+  else              metrics = null
+  return { fontnick, path, relpath, metrics, otjsfont, }
+
+#-----------------------------------------------------------------------------------------------------------
+@_open_font = ( path, relpath ) ->
+  try
+    return OT.loadSync path
+  catch error
+    warn "^fontmirror@1012^ when trying to open font #{rpr relpath}, an error occurred: #{error.message}"
+  return null
+
 #-----------------------------------------------------------------------------------------------------------
 @new_metrics = ( otjsfont ) ->
   upm             = 4096
@@ -47,6 +65,9 @@ OT                        = require 'opentype.js'
   advance_factor  = upm / source_upm
   return { upm, source_upm, path_precision, advance_factor, }
 
+
+#===========================================================================================================
+#
 #-----------------------------------------------------------------------------------------------------------
 @svg_path_from_cid = ( otjsfont, cid ) ->
   pathdata    = @svg_pathdata_from_cid otjsfont, cid
@@ -71,24 +92,20 @@ OT                        = require 'opentype.js'
   return null
 
 #-----------------------------------------------------------------------------------------------------------
-@_get_otjsglyph_and_pathdata = ( me, SVGTTF_font, cid, glyph ) ->
+@_get_otjsglyph_and_pathdata = ( me, font, cid, glyph ) ->
   # validate.positive_integer cid
-  { metrics, }        = SVGTTF_font
-  return null unless ( otjsglyph = @_otjsglyph_from_glyph SVGTTF_font.otjsfont, glyph )?
-  path_obj            = otjsglyph.getPath 0, 0, metrics.upm
+  { metrics, }  = font
+  return null unless ( otjsglyph = @_otjsglyph_from_glyph font.otjsfont, glyph )?
+  path_obj      = otjsglyph.getPath 0, 0, metrics.upm
   return null if path_obj.commands.length is 0
   @_quickscale path_obj, 1, -1
-  pathdata            = path_obj.toPathData metrics.path_precision
-  return { otjsglyph, pathdata, }
+  pathdata      = path_obj.toPathData metrics.path_precision
+  advance       = ( otjsglyph.advanceWidth * metrics.advance_factor ).toFixed metrics.path_precision
+  return { otjsglyph, advance, pathdata, }
 
-#-----------------------------------------------------------------------------------------------------------
-@_open_font = ( path, relpath ) ->
-  try
-    return OT.loadSync path
-  catch error
-    warn "^fontmirror@1012^ when trying to open font #{rpr relpath}, an error occurred: #{error.message}"
-  return null
 
+#===========================================================================================================
+#
 #-----------------------------------------------------------------------------------------------------------
 @walk_font_outlines = ( me, source ) ->
   ### Yield one commented line to show the path to the file cached; this also makes sure a file will exist
@@ -97,25 +114,20 @@ OT                        = require 'opentype.js'
   { fontnick
     path
     relpath }                 = source
-  description                 = { key: '^new-font', fontnick, path, }
+  #.........................................................................................................
+  progress_count  = 10000 ### output progress whenever multiple of this number reached ###
+  font            = @new_font me, source
+  metrics         = font.metrics
+  description     = { key: '^new-font', fontnick, path, metrics, }
   yield "#{jr description}\n"
-  return unless ( otjsfont = @_open_font path, source.relpath )?
-  progress_count              = 100 ### output progress whenever multiple of this number reached ###
-  SVGTTF_font                 = {}
-  SVGTTF_font.otjsfont        = otjsfont
-  SVGTTF_font.path            = path
-  SVGTTF_font.relpath         = relpath
-  SVGTTF_font.metrics         = metrics = @new_metrics otjsfont
-  # #.........................................................................................................
+  return unless font.metrics?
+  #.........................................................................................................
   fallback_pathdata = null
-  debug '^33221^'
-  # if ( otjsglyph = otjsfont.glyphs.get 0 )?
-  if ( d = @_get_otjsglyph_and_pathdata me, SVGTTF_font, null, 'fallback' )?
+  if ( d = @_get_otjsglyph_and_pathdata me, font, null, 'fallback' )?
     help '^55562^', 'fallback pathdata', fontnick, d.pathdata[ .. 80 ]
+    fallback_pathdata = d.pathdata
   else
     warn '^55562^', 'no fallback pathdata', fontnick
-
-  # false_fallback_pathdata = @_get_false_fallback_pathdata_from_SVGTTF_font me, SVGTTF_font
   #.........................................................................................................
   ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
   cids = []
@@ -147,24 +159,22 @@ OT                        = require 'opentype.js'
   cids = [ cids..., 0x10ffff, ] # A:u-----:10ffff:
   cids = [ cids..., 0x009fff, ] # A:uc0---:009fff:
   cids = [ ( new Set cids )..., ]
+  cids = [ 0x0000 .. 0xffff ]
   ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
   #.........................................................................................................
   for cid in cids
-    cid_hex     = '0x' + ( cid.toString 16 ).padStart 4, '0'
-    glyph       = String.fromCodePoint cid
-    d           = @_get_otjsglyph_and_pathdata me, SVGTTF_font, cid, glyph
-    continue if not d?
-    continue if d.pathdata is fallback_pathdata
+    cid_hex       = '0x' + ( cid.toString 16 ).padStart 4, '0'
+    glyph         = String.fromCodePoint cid
+    d             = @_get_otjsglyph_and_pathdata me, font, cid, glyph
+    continue if ( not d? ) or ( d.pathdata is fallback_pathdata )
+    pathdata_json = jr d.pathdata
+    advance       = d.advance
+    #.......................................................................................................
+    if isa.nan advance
+      warn "^ucdb@3332^ illegal advance for #{font.nick} #{cid_hex}: #{rpr advance}; setting to UPM"
+      advance = font.metrics.upm
+    #.......................................................................................................
     whisper '^ucdb@1013^', me.outline_count - 1 if ( me.outline_count++ % progress_count ) is 0
-    pathdata    = d.pathdata
-    advance     = ( d.otjsglyph.advanceWidth * metrics.advance_factor ).toFixed metrics.path_precision
-    ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
-    if ( isa.nan advance ) or ( advance is 0 )
-      ### TAINT code repetition ###
-      warn "^ucdb@3332^ illegal advance for #{SVGTTF_font.nick} #{cid_hex}: #{rpr advance}; setting to 1"
-      advance           = 1
-    ### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ###
-    pathdata_json = jr pathdata
     yield "#{cid_hex},#{glyph},#{advance},#{pathdata_json}\n"
   #.........................................................................................................
   return null
