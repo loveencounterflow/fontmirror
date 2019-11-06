@@ -4,9 +4,48 @@
 
 ## Font Catalog
 
+The FM Font Catalog is implemented as a number of directories which contain symbolic links (symlinks as
+provided by the file system) to build collections of pointers to the objects of interest. Apart from reading
+file metadata and file contents, FM will not touch, move or alter any object file, and it will not change
+anything outside a designated catalog location; thus, all effects of its actions are purely local and
+discardable without risk of data loss beyond what FM has produced itself.
+
+In order to use FontMirror,
+
+* give it a source location in the file system where to look for font files; call it `myfonts` and assume it
+  points to, say, `/home/user/fonts`;
+
+* give it a a target location where to store the resulting symlinks; let's say we tell it to use
+  `/home/user/fmcatalog`;
+
+The source is stored as a symlink in the `sources` subdirectory of the target, so there will be a symlink
+`/home/user/fmcatalog/sources/myfonts ↷⇴ /home/user/fonts`
+
+FM will then go and and look for fonts by running [glob](https://github.com/isaacs/node-glob) against the
+pattern `/home/user/fonts/**/*.+(otf|ttf|woff|woff2|ttc)`. For each file found, it will produce a nickname
+(a fontnick) by substituting 'problematic' letters in the filename by unproblematic replacement characters;
+the fontnicks then become the names to the fonts under `fmcatalog/all`.
+
+> 'Problematic' in this case means 'cannot be used within a legal (Xe)(La)TeX name', as defined by
+> [`latex3/unicode-data`](https://github.com/latex3/unicode-data); I realize this is a very specific
+> requirement that may not suit every use case, so probably in the future the sanitizing rules will be made
+> configurable.
+
+Here is what `fmcatalog/all` might look like after this step:
+
+```
+fmcatalog/all/
+```
+
+
+
+
+
 ### Purpose and Method
 
 ### Fontnicks
+
+FontMirror
 
 ### Tagging
 
