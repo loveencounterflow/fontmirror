@@ -19,7 +19,7 @@ In order to use FontMirror,
   `/home/user/fmcatalog`;
 
 The source is stored as a symlink in the `sources` subdirectory of the target, so there will be a symlink
-`/home/user/fmcatalog/sources/myfonts ↷⇴ /home/user/fonts`
+`/home/user/fmcatalog/sources/myfonts ↷ /home/user/fonts`
 
 FM will then go and and look for fonts by running [glob](https://github.com/isaacs/node-glob) against the
 pattern `/home/user/fonts/**/*.+(otf|ttf|woff|woff2|ttc)`. For each file found, it will produce a nickname
@@ -34,7 +34,11 @@ the fontnicks then become the names to the fonts under `fmcatalog/all`.
 Here is what `fmcatalog/all` might look like after this step:
 
 ```
-fmcatalog/all/
+fmcatalog/all/cwːteːxqyuanːmediumːttf           ↷ ../sources/myfonts/cwTeXQYuan-Medium.ttf
+fmcatalog/all/simfangːttf                       ↷ ../sources/myfonts/simfang.ttf
+fmcatalog/all/notoːserifːjpːblackːotf           ↷ ../sources/myfonts/NotoSerif/NotoSerifJP-Black.otf
+fmcatalog/all/robotoːcondensedːboldːitalicːttf  ↷ ../sources/myfonts/Roboto/RobotoCondensed-BoldItalic.ttf
+fmcatalog/all/sourceːcodeːproːboldːotf          ↷ ../sources/myfonts/SourceCodePro-Bold.otf
 ```
 
 
