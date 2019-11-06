@@ -135,11 +135,7 @@ unifrakturːcookːlightːttf                                   +latin  +fraktur 
 unifrakturːcookːttf                                         +latin  +fraktur  +medium
 unifrakturːmaguntiaːttf                                     +latin  +fraktur  +medium
 unifrakturːmaguntiaːoneːsixːttf                             +latin  +fraktur  +medium
-unifrakturːmaguntiaːoneːsevenːttf                           +latin  +fraktur  +medium
-unifrakturːmaguntiaːoneːeightːttf                           +latin  +fraktur  +medium
-unifrakturːmaguntiaːoneːnineːttf                            +latin  +fraktur  +medium
 unifrakturːmaguntiaːtwoːzeroːttf                            +latin  +fraktur  +medium
-unifrakturːmaguntiaːtwoːoneːttf                             +latin  +fraktur  +medium
 ```
 
 As can be readily seen, I like CJK fonts and Blackletter (Fraktur), which is how I labelled these fonts.
@@ -244,9 +240,86 @@ fmcatalog / tagged / +cjk+ming        / sunːextaːttf↷
 fmcatalog / tagged / +cjk             / sunːextaːttf↷
 ```
 
+Of course putting a symlink to the same file into three different subdirectories is not so meaningful, so
+let's do the cataloging for all of the above fonts:
+
+<!-- ┌┐└┘├┤┬┼─│┴ -->
+
+```
+┌──────────────────────────┬─────────────────────────────────────┐
+│+cjk                      │ cwːteːxqyuanːmediumːttf             │
+│                          │ notoːserifːjpːblackːotf             │
+│                          │ simfangːttf                         │
+│                          │ sunːextaːttf                        │
+│                          │ sunːextːbːttf                       │
+│                          │ takaoːpgothicːttf                   │
+│                          │ thːkhaaiːtpːtwoːttf                 │
+│                          │ thːkhaaiːtpːzeroːttf                │
+│                          │ 书法家超明体ːttf                     │
+├──────────────────────────┼─────────────────────────────────────┤
+│+cjk+kai                  │ thːkhaaiːtpːtwoːttf                 │
+│                          │ thːkhaaiːtpːzeroːttf                │
+├──────────────────────────┼─────────────────────────────────────┤
+│+cjk+kai+medium           │ thːkhaaiːtpːtwoːttf                 │
+│                          │ thːkhaaiːtpːzeroːttf                │
+├──────────────────────────┼─────────────────────────────────────┤
+│+cjk+linear               │ cwːteːxqyuanːmediumːttf             │
+│                          │ takaoːpgothicːttf                   │
+├──────────────────────────┼─────────────────────────────────────┤
+│+cjk+linear+roundtips     │ cwːteːxqyuanːmediumːttf             │
+├──────────────────────────┼─────────────────────────────────────┤
+│+cjk+linear+squaretips    │ takaoːpgothicːttf                   │
+├──────────────────────────┼─────────────────────────────────────┤
+│+cjk+ming                 │ notoːserifːjpːblackːotf             │
+│                          │ simfangːttf                         │
+│                          │ sunːextaːttf                        │
+│                          │ sunːextːbːttf                       │
+│                          │ 书法家超明体ːttf                     │
+├──────────────────────────┼─────────────────────────────────────┤
+│+cjk+ming+heavy           │ notoːserifːjpːblackːotf             │
+│                          │ 书法家超明体ːttf                     │
+├──────────────────────────┼─────────────────────────────────────┤
+│+cjk+ming+medium          │ simfangːttf                         │
+│                          │ sunːextaːttf                        │
+│                          │ sunːextːbːttf                       │
+├──────────────────────────┼─────────────────────────────────────┤
+│+cjk+ming+medium+skewed   │ simfangːttf                         │
+├──────────────────────────┼─────────────────────────────────────┤
+│+latin                    │ robotoːcondensedːboldːitalicːttf    │
+│                          │ sourceːcodeːproːboldːotf            │
+│                          │ unifrakturːcookːlightːttf           │
+│                          │ unifrakturːcookːttf                 │
+│                          │ unifrakturːmaguntiaːoneːsixːttf     │
+│                          │ unifrakturːmaguntiaːtwoːzeroːttf    │
+├──────────────────────────┼─────────────────────────────────────┤
+│+latin+fraktur            │ unifrakturːcookːlightːttf           │
+│                          │ unifrakturːcookːttf                 │
+│                          │ unifrakturːmaguntiaːoneːsixːttf     │
+│                          │ unifrakturːmaguntiaːtwoːzeroːttf    │
+├──────────────────────────┼─────────────────────────────────────┤
+│+latin+fraktur+light      │ unifrakturːcookːlightːttf           │
+├──────────────────────────┼─────────────────────────────────────┤
+│+latin+fraktur+medium     │ unifrakturːcookːttf                 │
+│                          │ unifrakturːmaguntiaːoneːsixːttf     │
+│                          │ unifrakturːmaguntiaːttf             │
+│                          │ unifrakturːmaguntiaːtwoːzeroːttf    │
+├──────────────────────────┼─────────────────────────────────────┤
+│+latin+monospace          │ sourceːcodeːproːboldːotf            │
+└──────────────────────────┴─────────────────────────────────────┘
+
+```
+
 ------------------------------------------------------------------------------
 
+what happens when font is tagged multiple times
 
+names?
+
+cherry-picking
+
+------------------------------------------------------------------------------
+
+<!--
 
 ```
 # fmcatalog/cfg/tags.txt (version 2)
@@ -272,7 +345,7 @@ unifrakturːmaguntiaːtwoːzeroːttf                            +latin+fraktur+m
 unifrakturːmaguntiaːtwoːoneːttf                             +latin+fraktur+medium+@unifraktur+@maguntia
 ```
 
-
+ -->
 ## Outline Cache
 
 
