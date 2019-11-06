@@ -76,20 +76,36 @@ of what cataloging fonts is all about. This is where tags come in. FontMirror ad
 model that may be characterized as follows:
 
 * **each tag is a short word** that describes a useful quality of an entity;
-* tags are symbolized as strings prefixed with a `+` (plus sign) because
+* tags are symbolized as **strings prefixed with a `+` (plus sign)** because
 * all **tags are affirmative**, so `+bold` will (presumably) mean 'yes, this font has bold letters';
   negatives (a la `-bold`) can (currently) only be formed by introducing mutually-exclusive tags (say,
   `+light`), but
-* observe that (currently) no efforts are made, by the tagging subsystem, to validate any rules beyond those
-  listed here, so users can totally label a given font as being *both* `+bold` and `+light` without the
-  software going to complain about that;
 * the set of tags used within a given catalog forms a **controlled vocabulary**;
 * there's a **total ordering of tags** within a given vocabulary, so of two distinct tags, one always
   precedes the other (and the other always succedes the one);
 * because of total ordering, we can always write **any set of tags in a unique way**; this is called a
-  combined tag or a 'combotag', wich, because of its uniqueness, lends itself to build file system names
-  from;
+  combined tag or 'combotag', wich, because of its uniqueness, lends itself to build file system names from.
 
+What you then do is you go and build a vocabulary, which is realized as basically just a file with a bunch
+of words in it; this establishes both what the allowed tags are and what ordering they have. This file
+should be saved as `fmcatalog/cfg/tag-vocabulary.txt`.
+
+Generally speaking, one will want to have one's tags grouped and ordered such that more general and more
+important terms come first, and more specific and less important ones come later. Having a definitive list
+of tags is a good thing as it facilitates spotting typos; ordering tags is instrumental to building a
+systematic catalog of combotags without getting drowned in a combinatorial explosion.
+
+Building such a vocabulary is probably best done in tandem with assigning tags to fonts to get a feeling for
+breadth and depth of bases one wants to cover at all. It's also probably a good idea to start out with a
+specific purpose in mind, so even just grabbing those quality typefaces first and marking them `+good` so as
+to sort the wheat from the chaff may be a valuable first step.
+
+The actual tagging takes place in `fmcatalog/cfg/tags.txt`, which lists one font per line, and has two
+fields, the fontnick and the tags, separated by whitespace.
+
+**Note** Observe that (currently) no efforts are made, by the tagging subsystem, to validate any rules
+beyond those listed here, so users can totally label a given font as being *both* `+bold` and `+light`
+without the software going to complain about that.
 
 ## Outline Cache
 
