@@ -152,7 +152,7 @@ appearance in the corresponding `tag-vocabulary.txt`. I could've used any order 
 sets, but it's probably a good idea to keep things consistent, so there you go. The vocabulary is defined by
 this list:
 
-```
+```coffee
 # script of interest
 +cjk!
 +latin!
