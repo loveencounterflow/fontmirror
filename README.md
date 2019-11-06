@@ -217,6 +217,7 @@ characters, it is also an element in every *super*set defined by and *sub*set of
 tempting to establish *all of those* subdirectories, each with its own symlink to the same target:
 
 ```
+# NB this is not how it works
 fmcatalog/tagged/+cjk+medium/sunːextaːttf       ↷ ../all/sunːextaːttf
 fmcatalog/tagged/+cjk+ming+medium/sunːextaːttf  ↷ ../all/sunːextaːttf
 fmcatalog/tagged/+cjk+ming/sunːextaːttf         ↷ ../all/sunːextaːttf
@@ -237,9 +238,9 @@ combotag; for `+cjk+ming+medium`, that's `+cjk+ming` and `+cjk` (so `n - 1` pref
 subsets). Therefore, the complete entries for the font in question look like this:
 
 ```
-fmcatalog/tagged/+cjk+ming+medium/sunːextaːttf ↷ ../all/sunːextaːttf
-fmcatalog/tagged/+cjk+ming/sunːextaːttf        ↷ ../all/sunːextaːttf
-fmcatalog/tagged/+cjk/sunːextaːttf             ↷ ../all/sunːextaːttf
+fmcatalog / tagged / +cjk+ming+medium / sunːextaːttf↷
+fmcatalog / tagged / +cjk+ming        / sunːextaːttf↷
+fmcatalog / tagged / +cjk             / sunːextaːttf↷
 ```
 
 ------------------------------------------------------------------------------
