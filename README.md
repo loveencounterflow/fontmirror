@@ -152,6 +152,8 @@ this list:
 # script of interest
 +cjk!
 +latin!
++greek!
++cyrillic!
 
 # style
 
@@ -241,7 +243,7 @@ fmcatalog / tagged / +cjk             / sunːextaːttf↷
 ```
 
 Of course putting a symlink to the same file into three different subdirectories is not so meaningful, so
-let's do the cataloging for all of the above fonts:
+let's do the cataloging for all of the above fonts. Here are the 16 fonts partitioned into 15 categories:
 
 <!-- ┌┐└┘├┤┬┼─│┴ -->
 
@@ -255,7 +257,7 @@ let's do the cataloging for all of the above fonts:
 │                          │ takaoːpgothicːttf                   │
 │                          │ thːkhaaiːtpːtwoːttf                 │
 │                          │ thːkhaaiːtpːzeroːttf                │
-│                          │ 书法家超明体ːttf                     │
+│                          │ 书法家超明体ːttf                      │
 ├──────────────────────────┼─────────────────────────────────────┤
 │+cjk+kai                  │ thːkhaaiːtpːtwoːttf                 │
 │                          │ thːkhaaiːtpːzeroːttf                │
@@ -274,10 +276,10 @@ let's do the cataloging for all of the above fonts:
 │                          │ simfangːttf                         │
 │                          │ sunːextaːttf                        │
 │                          │ sunːextːbːttf                       │
-│                          │ 书法家超明体ːttf                     │
+│                          │ 书法家超明体ːttf                      │
 ├──────────────────────────┼─────────────────────────────────────┤
 │+cjk+ming+heavy           │ notoːserifːjpːblackːotf             │
-│                          │ 书法家超明体ːttf                     │
+│                          │ 书法家超明体ːttf                      │
 ├──────────────────────────┼─────────────────────────────────────┤
 │+cjk+ming+medium          │ simfangːttf                         │
 │                          │ sunːextaːttf                        │
@@ -290,11 +292,13 @@ let's do the cataloging for all of the above fonts:
 │                          │ unifrakturːcookːlightːttf           │
 │                          │ unifrakturːcookːttf                 │
 │                          │ unifrakturːmaguntiaːoneːsixːttf     │
+│                          │ unifrakturːmaguntiaːttf             │
 │                          │ unifrakturːmaguntiaːtwoːzeroːttf    │
 ├──────────────────────────┼─────────────────────────────────────┤
 │+latin+fraktur            │ unifrakturːcookːlightːttf           │
 │                          │ unifrakturːcookːttf                 │
 │                          │ unifrakturːmaguntiaːoneːsixːttf     │
+│                          │ unifrakturːmaguntiaːttf             │
 │                          │ unifrakturːmaguntiaːtwoːzeroːttf    │
 ├──────────────────────────┼─────────────────────────────────────┤
 │+latin+fraktur+light      │ unifrakturːcookːlightːttf           │
@@ -306,8 +310,34 @@ let's do the cataloging for all of the above fonts:
 ├──────────────────────────┼─────────────────────────────────────┤
 │+latin+monospace          │ sourceːcodeːproːboldːotf            │
 └──────────────────────────┴─────────────────────────────────────┘
+```
+
+Because these tags all live in a single directory, there's no climbing through recursivly nested subtrees.
+You just choose one subdirectory with a particular choice of tags—be it a shorter combotag for a wider
+selection or a longer combotag for a narrower selection—and presto, you'll see all matches neatly listed
+below that one: The `fmcatalog/tagged` directory has one more sublevel, but that's—intentionally—it.
+
+Yet, there's still a flaw in this design, and it becomes apparent from looking at `tag-vocabulary.txt`
+again: it lists scripts first, in the order `+cjk`, `+latin`, `+greek`, `+cyrillic`. The question arises:
+what if a font is both good at `+greek` *and* `+cyrillic`? Since `+greek` happens to precede `+cyrillic`,
+there's no way to get `+cyrillic` as a top-level category, that is, there will never be a single directory
+that has the links to all those fonts you identified as being interesting for Cyrillic when some of those
+fonts are also good for Greek. Likewise, looking at the table above one will realize there's no single spot
+for all the `+medium` weight typefaces. Instead, there's three of them, `+cjk+kai+medium`,
+`+cjk+ming+medium`, and `+latin+fraktur+medium`, so one would have to look in quite a few places to find
+all fonts with matching weights! If one could only both eat the cake and cherry-pick!
+
+Turns out one can: in order to mark any tag as important—make it a V.I.P., so to speak—just follow it with
+an exclamation mark in `tag-vocabulary.txt`. Doing so will XXXXXXXXXXXXXXX XXXXXXXXXXXXXXX XXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXX XXXXXXXXXXXXXXX XXXXXXXXXXXXXXX
 
 ```
++latin+fraktur+medium!
+=>
++medium!+latin+fraktur
++medium!+latin
+```
+
 
 ------------------------------------------------------------------------------
 
