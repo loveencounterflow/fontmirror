@@ -214,17 +214,18 @@ an intermediate dispatcher to obtain a view that is not structured by filenames 
 But there's more, and that's *partial* or *subset* combotags. Obviously, tags being defined the way they
 are, `sunːextaːttf` is not only a `+medium` weight in `+ming` style that has some coverage of `+cjk`
 characters, it is also an element in every *super*set defined by and *sub*set of these three tags, so it's
-tempting to establish *all of those* subdirectories, each with its own symlink to the same target:
+tempting to establish *all of those* subdirectories, each with its own symlink to the same target (formatted
+and leaving out targets for readability):
 
 ```
 # NB this is not how it works
-fmcatalog/tagged/+cjk+medium/sunːextaːttf       ↷ ../all/sunːextaːttf
-fmcatalog/tagged/+cjk+ming+medium/sunːextaːttf  ↷ ../all/sunːextaːttf
-fmcatalog/tagged/+cjk+ming/sunːextaːttf         ↷ ../all/sunːextaːttf
-fmcatalog/tagged/+cjk/sunːextaːttf              ↷ ../all/sunːextaːttf
-fmcatalog/tagged/+medium/sunːextaːttf           ↷ ../all/sunːextaːttf
-fmcatalog/tagged/+ming+medium/sunːextaːttf      ↷ ../all/sunːextaːttf
-fmcatalog/tagged/+ming/sunːextaːttf             ↷ ../all/sunːextaːttf
+fmcatalog / tagged / +cjk+medium      / sunːextaːttf↷
+fmcatalog / tagged / +cjk+ming+medium / sunːextaːttf↷
+fmcatalog / tagged / +cjk+ming        / sunːextaːttf↷
+fmcatalog / tagged / +cjk             / sunːextaːttf↷
+fmcatalog / tagged / +medium          / sunːextaːttf↷
+fmcatalog / tagged / +ming+medium     / sunːextaːttf↷
+fmcatalog / tagged / +ming            / sunːextaːttf↷
 ```
 
 While this approach would yield maximum coverage for your fonts, it'd also provide maximum coverage for your
