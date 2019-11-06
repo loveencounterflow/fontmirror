@@ -9,10 +9,12 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Font Catalog](#font-catalog)
+  - [Cataloging by Symlinking](#cataloging-by-symlinking)
+  - [Fontnicks](#fontnicks)
   - [Tagging](#tagging)
 - [Outline Cache](#outline-cache)
 - [Details](#details)
-  - [Fontnicks](#fontnicks)
+  - [Details on Fontnicks](#details-on-fontnicks)
   - [Details on Tagging](#details-on-tagging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -21,6 +23,8 @@
 
 
 ## Font Catalog
+
+### Cataloging by Symlinking
 
 The FM Font Catalog is implemented as a number of directories which contain symbolic links (symlinks as
 provided by the file system) to build collections of pointers to the objects of interest. Apart from reading
@@ -38,6 +42,8 @@ In order to use FontMirror,
 
 The source is stored as a symlink in the `sources` subdirectory of the target, so there will be a symlink
 `/home/user/fmcatalog/sources/myfonts ↷ /home/user/fonts`
+
+### Fontnicks
 
 FM will then go and and look for fonts by running [glob](https://github.com/isaacs/node-glob) against the
 pattern `/home/user/fonts/**/*.+(otf|ttf|woff|woff2|ttc)`. For each file found, it will produce a nickname
@@ -66,7 +72,7 @@ we want to obtain a flat namespace for all fonts, no matter where they are actua
 
 ## Details
 
-### Fontnicks
+### Details on Fontnicks
 
 > 'Problematic' in this case means 'cannot be used within a legal (Xe)(La)TeX name', as defined by
 > [`latex3/unicode-data`](https://github.com/latex3/unicode-data); I realize this is a very specific
