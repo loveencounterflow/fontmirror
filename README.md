@@ -40,12 +40,13 @@ fmcatalog/all/sourceːcodeːproːboldːotf          ↷ ../sources/myfonts/Sourc
 As one can see, subdirectories in the source location have been ignored in the target. This is intentional:
 we want to obtain a flat namespace for all fonts, no matter where they are actually stored.
 
+### Tagging
 
 
+## Outline Cache
 
 
-
-### Purpose and Method
+## Details
 
 ### Fontnicks
 
@@ -71,7 +72,7 @@ we want to obtain a flat namespace for all fonts, no matter where they are actua
 
 
 
-### Tagging
+### Details on Tagging
 
 Tags are notated as whitespace-less words with a `+` (plus sign) as prefix. U+002D `-` (hyphen-minus) is
 not allowed in tags as it is reserved for future use as a negation operator.
@@ -114,9 +115,5 @@ combotag will always result in the selection staying constant or becoming smalle
 > The set of all untagged entities may be written as `-*` ('minus-any').
 
 <!-- --------------------------------------------------------------------------------------------------- -->
-
-
-## Outline Cache
-
 
 
