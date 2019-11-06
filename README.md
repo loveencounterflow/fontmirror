@@ -110,8 +110,8 @@ without the software going to complain about that.
 
 ### Plain Tags and Names, Cherry-Picking and Combotags
 
-Let's look into a small set of tagged fonts to drive home what has been said above and to get an idea of
-what the resulting FontMirror catalog will looke like. We will also use this example to motivate the
+Let's take a gander at a small set of tagged fonts to drive home what has been said above and to get an idea
+of what the resulting FontMirror catalog is going look like. We will also use this example to motivate the
 introduction of two features on top of the tagging system outlined above: tags that are treated as proper
 names, and cherry-picking of tags.
 
@@ -126,7 +126,7 @@ simfangːttf                                                 +cjk    +ming     +
 sunːextaːttf                                                +cjk    +ming     +medium
 sunːextːbːttf                                               +cjk    +ming     +medium
 notoːserifːjpːblackːotf                                     +cjk    +ming     +heavy
-书法家超明体ːttf                                             +cjk    +ming     +heavy
+书法家超明体ːttf                                              +cjk    +ming     +heavy
 thːkhaaiːtpːzeroːttf                                        +cjk    +kai      +medium
 thːkhaaiːtpːtwoːttf                                         +cjk    +kai      +medium
 robotoːcondensedːboldːitalicːttf                            +latin
@@ -148,7 +148,9 @@ broadest stylistic characteristics. Another layer of differentiation is brought 
 of some typefaces using a tripartite scale ranging from `+light` over `+medium` to `+heavy`.
 
 Incidentally, I've taken care to order all of the tags in the listing such that it fits their order of
-appearance in the corresponding `tag-vocabulary.txt`, which is just this list:
+appearance in the corresponding `tag-vocabulary.txt`. I could've used any order when writing out the tag
+sets, but it's probably a good idea to keep things consistent, so there you go. The vocabulary is defined by
+this list:
 
 ```
 # script of interest
