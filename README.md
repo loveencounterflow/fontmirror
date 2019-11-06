@@ -26,13 +26,6 @@ pattern `/home/user/fonts/**/*.+(otf|ttf|woff|woff2|ttc)`. For each file found, 
 (a fontnick) by substituting 'problematic' letters in the filename by unproblematic replacement characters;
 the fontnicks then become the names to the fonts under `fmcatalog/all`.
 
-> 'Problematic' in this case means 'cannot be used within a legal (Xe)(La)TeX name', as defined by
-> [`latex3/unicode-data`](https://github.com/latex3/unicode-data); I realize this is a very specific
-> requirement that may not suit every use case, so probably in the future the sanitizing rules will be made
-> configurable. Don't get thrown off by the ː (U+02D0 Modifier Letter Triangular Colon) mark you see in the
-> fontnicks, it's a sleight of hand to make names more readable, achieve reasonable chance of uniqueness of
-> moderate number of source files, and obtain strings that are accepted as font names in TeX.
-
 Here is what `ls fmcatalog/all` might look like after this step:
 
 ```
@@ -47,19 +40,6 @@ fmcatalog/all/sourceːcodeːproːboldːotf          ↷ ../sources/myfonts/Sourc
 As one can see, subdirectories in the source location have been ignored in the target. This is intentional:
 we want to obtain a flat namespace for all fonts, no matter where they are actually stored.
 
-> A quick look at
-> [texfontnamesake.coffee](https://github.com/loveencounterflow/fontmirror/blob/master/src/texfontnamesake.coffee#L48)
-> will show that name clashes will become very likely as the number of fonts increases, so a future version
-> of FontMirror will implement a way to deal with those cases. We *could* build the entire catalog either
-> from hashes of the `realpath`s of files or their contents, but that would make the results rather
-> unreadable for humans; it also does not solve the problem how to organize one's fonts in references from
-> CSS or TeX or other systems unless one is willing to copy-paste untractable strings of arbitrary letters.
-
-> There's also the likelyhood of certain fonts to be stored multiple times in different locations. Because
-> we reference to fontfiles using their `sha1sum`, there's less of a problem for files that are exact
-> duplicates of each other.
-
-
 
 
 
@@ -69,7 +49,27 @@ we want to obtain a flat namespace for all fonts, no matter where they are actua
 
 ### Fontnicks
 
-FontMirror
+> 'Problematic' in this case means 'cannot be used within a legal (Xe)(La)TeX name', as defined by
+> [`latex3/unicode-data`](https://github.com/latex3/unicode-data); I realize this is a very specific
+> requirement that may not suit every use case, so probably in the future the sanitizing rules will be made
+> configurable. Don't get thrown off by the ː (U+02D0 Modifier Letter Triangular Colon) mark you see in the
+> fontnicks, it's a sleight of hand to make names more readable, achieve reasonable chance of uniqueness of
+> moderate number of source files, and obtain strings that are accepted as font names in TeX.
+
+> A quick look at
+> [texfontnamesake.coffee](https://github.com/loveencounterflow/fontmirror/blob/master/src/texfontnamesake.coffee#L48)
+> shows that name clashes, as a necessity, become ever more likely as the number of fonts goes up, so a
+> future version of FontMirror will implement a way to deal with those cases. We *could* build the entire
+> catalog either from hashes of the `realpath`s of files or their contents, but that would make the results
+> rather unreadable for humans; it also does not solve the problem how to organize one's fonts in references
+> from CSS or TeX or other systems unless one is willing to copy-paste untractable strings of arbitrary
+> letters.
+
+> There's also the likelyhood of certain fonts to be stored multiple times in different locations. Because
+> we refer, in the outline cache, to fontfiles using their contents' `sha1sum`, there is less of a problem
+> for files that are exact duplicates of each other.
+
+
 
 ### Tagging
 
