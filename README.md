@@ -180,6 +180,68 @@ this list:
 +oblique
 ```
 
+This file is roughly partitioned into groups, sometimes with a code comment like `script` or `weight` above
+it, but keep in mind this is only dony by and for the author, as tag groups do not formally exist in FM.
+
+The reader may notice the exclamation signs in some tags: there's `+medium` but `+heavy!`, `+ming!` next to
+`+kai` and so forth: these denote cherry-picked tags, to which we come back mementarily.
+
+From the above data—the catalog of font files derived from a source location, the tag vocabulary, and the
+associations between fonts and tags, FontMirror can now proceed to produce the catalog proper, which will be
+realized as a series of subdirectories under `fmcatalog/tagged`. Here's how that works:
+
+For each entry in `tags.txt`, FM will sort the tags as declared by their ordering in the vocabulary to
+derive a normalized combotag for that entry, so for example `sunːextaːttf +medium +cjk +ming` will be read
+as `sunːextaːttf` being tagged as `+cjk+ming+medium`. Consequently, FM will create a directory with that
+name (`fmcatalog/tagged/+cjk+ming+medium`, unless it already exists) and create a symlink from the fontnick
+to the namesake fontnick in `fmcatalog/all`:
+
+```
+fmcatalog/tagged/+cjk+ming+medium/sunːextaːttf ↷ ../all/sunːextaːttf
+```
+
+The symlink means that now you can query all fonts tagged as `+cjk+ming+medium` by using the `ls` command;
+similarly, in order to trace back where the referenced font file is located, `realpath` can be used:
+
+```sh
+ls       fmcatalog/tagged/+cjk+ming+medium/
+realpath fmcatalog/tagged/+cjk+ming+medium/sunːextaːttf
+```
+
+This is great because now all the standard tools you're used to read and write files with can be pointed to
+an intermediate dispatcher to obtain a view that is not structured by filenames but by your own ontology.
+
+But there's more, and that's *partial* or *subset* combotags. Obviously, tags being defined the way they
+are, `sunːextaːttf` is not only a `+medium` weight in `+ming` style that has some coverage of `+cjk`
+characters, it is also an element in every *super*set defined by and *sub*set of these three tags, so it's
+tempting to establish *all of those* subdirectories, each with its own symlink to the same target:
+
+```
+fmcatalog/tagged/+cjk+medium/sunːextaːttf       ↷ ../all/sunːextaːttf
+fmcatalog/tagged/+cjk+ming+medium/sunːextaːttf  ↷ ../all/sunːextaːttf
+fmcatalog/tagged/+cjk+ming/sunːextaːttf         ↷ ../all/sunːextaːttf
+fmcatalog/tagged/+cjk/sunːextaːttf              ↷ ../all/sunːextaːttf
+fmcatalog/tagged/+medium/sunːextaːttf           ↷ ../all/sunːextaːttf
+fmcatalog/tagged/+ming+medium/sunːextaːttf      ↷ ../all/sunːextaːttf
+fmcatalog/tagged/+ming/sunːextaːttf             ↷ ../all/sunːextaːttf
+```
+
+While this approach would yield maximum coverage for your fonts, it'd also provide maximum coverage for your
+hard disk storage, because the size of the powerset of a given set `S` equals two to the size (cardinality)
+of S (i.e. `2 ^ n` with `n = |S|`). Meaning that if you characterize a given font by a meager 16 tags, and why
+not, you'd get a virtually unusable catalog choc-full with no less than 16635 subdirectories. There's
+probably a reason it's called a powerset after all.
+
+Therefore, instead of producing *all* the subsets, FM will only produce all possible *prefixes* for a given
+combotag; for `+cjk+ming+medium`, that's `+cjk+ming` and `+cjk` (so `n - 1` prefixes instead of `2 ^ n`
+subsets). Therefore, the complete entries for the font in question look like this:
+
+```
+fmcatalog/tagged/+cjk+ming+medium/sunːextaːttf ↷ ../all/sunːextaːttf
+fmcatalog/tagged/+cjk+ming/sunːextaːttf        ↷ ../all/sunːextaːttf
+fmcatalog/tagged/+cjk/sunːextaːttf             ↷ ../all/sunːextaːttf
+```
+
 ------------------------------------------------------------------------------
 
 
