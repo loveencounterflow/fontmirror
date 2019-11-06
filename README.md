@@ -41,7 +41,7 @@ In order to use FontMirror,
   `/home/user/fmcatalog`;
 
 The source is stored as a symlink in the `sources` subdirectory of the target, so there will be a symlink
-`/home/user/fmcatalog/sources/myfonts ↷ /home/user/fonts`
+`/home/user/fmcatalog/sources/myfonts ↷ /home/user/fonts`.
 
 ### Fontnicks
 
@@ -62,9 +62,33 @@ fmcatalog/all/sourceːcodeːproːboldːotf          ↷ ../sources/myfonts/Sourc
 ```
 
 As one can see, subdirectories in the source location have been ignored in the target. This is intentional:
-we want to obtain a flat namespace for all fonts, no matter where they are actually stored.
+we want to obtain a flat namespace for all fonts, no matter where they are actually stored. Also, the target
+entities are referenced by referring back to the link established in `sources`; in principle, when moving
+the catalog relative to the font files, rewriting the links in sources should suffice to keeping valid links
+throughout the catalog (this may become important when effort has been spent to collect many megabytes worth
+of outline data as discussed below, as re-writing the symlinks alsone is done in seconds, but pathdata
+extraction requires significantly more computational effort).
 
 ### Tagging
+
+So now we have a catalog in `fmcatalog/all` with a flat list of all our fonts, which is great but just part
+of what cataloging fonts is all about. This is where tags come in. FontMirror adopts a very simple tagging
+model that may be characterized as follows:
+
+* **each tag is a short word** that describes a useful quality of an entity;
+* tags are symbolized as strings prefixed with a `+` (plus sign) because
+* all **tags are affirmative**, so `+bold` will (presumably) mean 'yes, this font has bold letters';
+  negatives (a la `-bold`) can (currently) only be formed by introducing mutually-exclusive tags (say,
+  `+light`), but
+* observe that (currently) no efforts are made, by the tagging subsystem, to validate any rules beyond those
+  listed here, so users can totally label a given font as being *both* `+bold` and `+light` without the
+  software going to complain about that;
+* the set of tags used within a given catalog forms a **controlled vocabulary**;
+* there's a **total ordering of tags** within a given vocabulary, so of two distinct tags, one always
+  precedes the other (and the other always succedes the one);
+* because of total ordering, we can always write **any set of tags in a unique way**; this is called a
+  combined tag or a 'combotag', wich, because of its uniqueness, lends itself to build file system names
+  from;
 
 
 ## Outline Cache
