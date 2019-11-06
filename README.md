@@ -12,6 +12,7 @@
   - [Cataloging by Symlinking](#cataloging-by-symlinking)
   - [Fontnicks](#fontnicks)
   - [Tagging](#tagging)
+  - [Plain Tags and Names, Cherry-Picking and Combotags](#plain-tags-and-names-cherry-picking-and-combotags)
 - [Outline Cache](#outline-cache)
 - [Details](#details)
   - [Details on Fontnicks](#details-on-fontnicks)
@@ -106,6 +107,105 @@ fields, the fontnick and the tags, separated by whitespace.
 **Note** Observe that (currently) no efforts are made, by the tagging subsystem, to validate any rules
 beyond those listed here, so users can totally label a given font as being *both* `+bold` and `+light`
 without the software going to complain about that.
+
+### Plain Tags and Names, Cherry-Picking and Combotags
+
+Let's look into a small set of tagged fonts to drive home what has been said above and to get an idea of
+what the resulting FontMirror catalog will looke like. We will also use this example to motivate the
+introduction of two features on top of the tagging system outlined above: tags that are treated as proper
+names, and cherry-picking of tags.
+
+Let's assume we have the following entries in `fmcatalog/cfg/tags.txt` (in a bid to improve readability,
+I've spaced out the tags to achieve a tabular effect; this is purely optional):
+
+```
+# fmcatalog/cfg/tags.txt (version 1)
+cwːteːxqyuanːmediumːttf                                     +cjk    +linear             +roundtips
+takaoːpgothicːttf                                           +cjk    +linear             +squaretips
+simfangːttf                                                 +cjk    +ming     +medium   +skewed
+sunːextaːttf                                                +cjk    +ming     +medium
+sunːextːbːttf                                               +cjk    +ming     +medium
+notoːserifːjpːblackːotf                                     +cjk    +ming     +heavy
+书法家超明体ːttf                                             +cjk    +ming     +heavy
+thːkhaaiːtpːzeroːttf                                        +cjk    +kai      +medium
+thːkhaaiːtpːtwoːttf                                         +cjk    +kai      +medium
+robotoːcondensedːboldːitalicːttf                            +latin
+sourceːcodeːproːboldːotf                                    +latin  +monospace
+unifrakturːcookːlightːttf                                   +latin  +fraktur  +light
+unifrakturːcookːttf                                         +latin  +fraktur  +medium
+unifrakturːmaguntiaːttf                                     +latin  +fraktur  +medium
+unifrakturːmaguntiaːoneːsixːttf                             +latin  +fraktur  +medium
+unifrakturːmaguntiaːoneːsevenːttf                           +latin  +fraktur  +medium
+unifrakturːmaguntiaːoneːeightːttf                           +latin  +fraktur  +medium
+unifrakturːmaguntiaːoneːnineːttf                            +latin  +fraktur  +medium
+unifrakturːmaguntiaːtwoːzeroːttf                            +latin  +fraktur  +medium
+unifrakturːmaguntiaːtwoːoneːttf                             +latin  +fraktur  +medium
+```
+
+As can be readily seen, I like CJK fonts and Blackletter (Fraktur), which is how I labelled these fonts.
+Also, I used tags like `+ming`, `+linear`, `+kai`, `+monospace` to further classify fonts according to their
+broadest stylistic characteristics. Another layer of differentiation is brought in by annotating the weight
+of some typefaces using a tripartite scale ranging from `+light` over `+medium` to `+heavy`.
+
+Incidentally, I've taken care to order all of the tags in the listing such that it fits their order of
+appearance in the corresponding `tag-vocabulary.txt`, which is just this list:
+
+```
+# script of interest
++cjk!
++latin!
+
+# style
+
++kai
++linear!
++ming!
++kai
+
++roundtips
++squaretips
+
++fraktur
++monospace
+
+# weight
++light
++medium
++heavy!
+
+# modifications
++skewed
++oblique
+```
+
+------------------------------------------------------------------------------
+
+
+
+```
+# fmcatalog/cfg/tags.txt (version 2)
+cwːteːxqyuanːmediumːttf                                     +cjk+linear+roundtips
+simfangːttf                                                 +cjk+ming+skewed
+notoːserifːjpːblackːotf                                     +cjk+ming+heavy
+takaoːpgothicːttf                                           +cjk+linear+squaretips+@takao
+thːkhaaiːtpːzeroːttf                                        +cjk+kai+medium+@ththsyn
+thːkhaaiːtpːtwoːttf                                         +cjk+kai+medium+@ththsyn
+sunːextaːttf                                                +cjk+ming+medium+@sun
+sunːextːbːttf                                               +cjk+ming+medium+@sun
+书法家超明体ːttf                                             +cjk+ming+heavy
+robotoːcondensedːboldːitalicːttf                            +latin
+sourceːcodeːproːboldːotf                                    +latin+monospace
+unifrakturːcookːlightːttf                                   +latin+fraktur+light+@unifraktur+@cook
+unifrakturːcookːttf                                         +latin+fraktur+medium+@unifraktur+@cook
+unifrakturːmaguntiaːttf                                     +latin+fraktur+medium+@unifraktur+@maguntia
+unifrakturːmaguntiaːoneːsixːttf                             +latin+fraktur+medium+@unifraktur+@maguntia
+unifrakturːmaguntiaːoneːsevenːttf                           +latin+fraktur+medium+@unifraktur+@maguntia
+unifrakturːmaguntiaːoneːeightːttf                           +latin+fraktur+medium+@unifraktur+@maguntia
+unifrakturːmaguntiaːoneːnineːttf                            +latin+fraktur+medium+@unifraktur+@maguntia
+unifrakturːmaguntiaːtwoːzeroːttf                            +latin+fraktur+medium+@unifraktur+@maguntia
+unifrakturːmaguntiaːtwoːoneːttf                             +latin+fraktur+medium+@unifraktur+@maguntia
+```
+
 
 ## Outline Cache
 
