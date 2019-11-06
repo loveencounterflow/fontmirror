@@ -1,20 +1,24 @@
+
+
+# FontMirror
+
+
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [FontMirror](#fontmirror)
-  - [Font Catalog](#font-catalog)
-    - [Tagging](#tagging)
-  - [Outline Cache](#outline-cache)
-  - [Details](#details)
-    - [Fontnicks](#fontnicks)
-    - [Details on Tagging](#details-on-tagging)
+- [Font Catalog](#font-catalog)
+  - [Tagging](#tagging)
+- [Outline Cache](#outline-cache)
+- [Details](#details)
+  - [Fontnicks](#fontnicks)
+  - [Details on Tagging](#details-on-tagging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 
-# FontMirror
 
 ## Font Catalog
 
