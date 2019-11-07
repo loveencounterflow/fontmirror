@@ -6,6 +6,9 @@
   "directories": {
     "lib": "lib"
   },
+  "bin": {
+    "fontmirror": "./lib/cli.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -31,6 +34,7 @@
   "dependencies": {
     "cnd": "^4.6.0",
     "commander": "^4.0.0",
+    "configstore": "^5.0.0",
     "glob": "^7.1.5",
     "intertype": "^2.5.0",
     "mkdirp": "^0.5.1",
