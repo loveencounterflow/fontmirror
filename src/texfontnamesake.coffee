@@ -73,12 +73,29 @@ if require.main is module then do =>
     'SUN-EXTB.TTF'
     'legalnameₘ'
     ]
-  paths = ( require 'glob' ).sync '/home/flow/jzr/benchmarks/assets/fontmirror/fonts/*/**'
+  PATH                = require 'path'
+  fontfile_extensions = 'otf|ttf|woff|woff2|ttc'
+  home                = '/home/flow/jzr/benchmarks/assets/fontmirror/fonts'
+  pattern             = PATH.join home, "/**/*.+(#{fontfile_extensions})"
+  paths               = ( require 'glob' ).sync pattern
+  seen                = {}
   for path in paths
-    name = ( require 'path' ).basename path
-    debug '^89973^', ( CND.lime rpr name ), ( CND.white rpr @escape name )
-  for text in texts
-    debug '^89973^', ( CND.lime rpr text ), ( CND.white rpr @escape text )
+    name      = PATH.basename path
+    fontnick  = @escape name
+    cache     = seen[ fontnick ] ?= []
+    if cache.length isnt 0
+      names = cache.join ' | '
+      warn '^89973^', "seen: {fontnick} {names}"
+    else
+      whisper '^89973^', ( CND.lime rpr fontnick ), ( CND.white rpr name )
+    cache.push name
+  for fontnick, cache of seen
+    continue if cache.length is 1
+    names = cache.join ' | '
+    debug '^4446^', fontnick, names
+  # debug seen
+  # for text in texts
+  #   debug '^89973^', ( CND.lime rpr text ), ( CND.white rpr @escape text )
 
   # for cid in [ 0x1ff .. 0x4ff ]
   #   glyph = String.fromCodePoint cid
