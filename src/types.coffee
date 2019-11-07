@@ -46,12 +46,12 @@ FS                        = require 'fs'
   "x points to existing folder":            ( x ) ->
     try return ( FS.statSync x ).isDirectory() catch error then return false
 
-# #-----------------------------------------------------------------------------------------------------------
-# @declare 'fontmirror_settings',
-#   tests:
-#     "x is a object":                          ( x ) -> @isa.object              x
-#     "x.db_path is a nonempty_text":           ( x ) -> @isa.nonempty_text       x.db_path
-#     "x.icql_path is a nonempty_text":         ( x ) -> @isa.nonempty_text       x.icql_path
+#-----------------------------------------------------------------------------------------------------------
+@declare 'fontmirror_settings',
+  tests:
+    "x is a object":                          ( x ) -> @isa.object              x
+    "x.source_path is a nonempty_text":       ( x ) -> @isa.nonempty_text       x.source_path
+    "x.target_path is a nonempty_text":       ( x ) -> @isa.nonempty_text       x.target_path
 
 # #-----------------------------------------------------------------------------------------------------------
 # @declare 'fontmirror_web_layout_SLUG_settings',
