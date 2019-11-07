@@ -120,18 +120,6 @@ fontfile_extensions       = 'otf|ttf|woff|woff2|ttc'
     await @_write_font_outlines me, source, target_path
   return null
 
-#-----------------------------------------------------------------------------------------------------------
-@cli = ->
-  app = require 'commander'
-  app
-    .version ( require '../package.json' ).version
-    .command 'cache <source> <target>'
-    .option '-f --force', "force overwrite existing cache"
-    .action ( source_path, target_path, d ) ->
-      force_overwrite = d.force ? false
-      await FONTMIRROR.cache_font_outlines source_path, target_path, force_overwrite
-  app.parse(process.argv);
-  return null
 
 
 #===========================================================================================================
@@ -144,6 +132,14 @@ class Fontmirror extends Multimix
   @include ( require './cachewalker.mixin' ), { overwrite: false, }
   @include ( require './_temp_svgttf' ),      { overwrite: false, } ### !!!!!!!!!!!!!!!!!!!!!!!!!!! ###
   # @extend MAIN, { overwrite: false, }
+
+  #---------------------------------------------------------------------------------------------------------
+  constructor: ( target = null ) ->
+    super()
+    @CLI  = require './cli'
+    @CFG  = require './cfg'
+    @TAGS = require './tags'
+    @export target if target?
 
 module.exports = FONTMIRROR = new Fontmirror()
 
