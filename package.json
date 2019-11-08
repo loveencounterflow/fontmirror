@@ -41,6 +41,7 @@
     "multimix": "^2.1.0",
     "n-readlines": "^1.0.0",
     "opentype.js": "^1.1.0",
-    "steampipes": "^3.0.1"
+    "steampipes": "^3.0.1",
+    "trash": "^6.0.0"
   }
 }
