@@ -43,13 +43,21 @@ PATH                      = require 'path'
   pattern             = PATH.join source_path, "/**/*.+(#{extensions})"
   paths               = ( require 'glob' ).sync pattern
   paths_by_fontnicks  = {}
+  links_home          = PATH.join target_path, 'all'
   #.........................................................................................................
+  ### !?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!? ###
+  FONTMIRROR.LINKS.relink ( PATH.join target_path, 'sources' ), source_path
+  mkdirp = require 'mkdirp'
+  mkdirp.sync links_home
+  #.........................................................................................................
+  ### collect all filepaths ###
   for path in paths
     name      = PATH.basename path
     fontnick  = FONTMIRROR.NICKS.escape name
     cache     = paths_by_fontnicks[ fontnick ] ?= []
-    cache.push name
+    cache.push path
   #.........................................................................................................
+  ### disambiguate fontnicks as `fooːA`, `fooːB`, ... ###
   for fontnick, cache of paths_by_fontnicks
     #.......................................................................................................
     if cache.length is 1
@@ -63,10 +71,19 @@ PATH                      = require 'path'
       new_fontnick = fontnick + partitioner + String.fromCodePoint 0x41 + idx
       paths_by_fontnicks[ new_fontnick ] = path
   #.........................................................................................................
+  ### rewrite paths to relative as used in symlink ###
+  # for fontnick, path of paths_by_fontnicks
+
+  #.........................................................................................................
+  XXXXXXXX_count = 0
   for fontnick, path of paths_by_fontnicks
-    echo ( CND.white ( fontnick + ':' ).padEnd 70 ), ( CND.lime path )
+    # break if XXXXXXXX_count++ > 3
+    source_name       = PATH.basename path
+    short_path        = PATH.join '../sources', PATH.relative source_path, path
+    link_location     = PATH.relative process.cwd(), PATH.join links_home, fontnick
+    echo ( CND.white fontnick.padEnd 60 ), ( CND.blue link_location ), '->', ( CND.yellow short_path )
     continue if dry
-    @_symlink
+    await FONTMIRROR.LINKS.relink link_location, short_path
   #.........................................................................................................
   if dry
     echo CND.grey "dry run; no links have been written"
