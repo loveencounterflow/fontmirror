@@ -136,9 +136,11 @@ class Fontmirror extends Multimix
   #---------------------------------------------------------------------------------------------------------
   constructor: ( target = null ) ->
     super()
-    @CLI  = require './cli'
-    @CFG  = require './cfg'
-    @TAGS = require './tags'
+    @CLI    = require './cli'
+    @CFG    = require './cfg'
+    @TAGS   = require './tags'
+    @NICKS  = require './texfontnamesake'
+    @LINKS  = require './links'
     @export target if target?
 
 module.exports = FONTMIRROR = new Fontmirror()
