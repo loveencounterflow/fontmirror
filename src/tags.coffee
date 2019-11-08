@@ -34,12 +34,42 @@ PATH                      = require 'path'
 # require                   './exception-handler'
 
 #-----------------------------------------------------------------------------------------------------------
-@link_all_sources = ->
-  FONTMIRROR = require '..'
-  source_path = FONTMIRROR.CFG.set_or_get 'source_path'
-  target_path = FONTMIRROR.CFG.set_or_get 'target_path'
-  debug '^4778^', source_path, source_path
-  debug '^4778^', target_path, target_path
+@link_all_sources = ( dry = false ) ->
+  FONTMIRROR          = require '..'
+  source_path         = FONTMIRROR.CFG.set_or_get 'source_path'
+  target_path         = FONTMIRROR.CFG.set_or_get 'target_path'
+  partitioner         = FONTMIRROR.NICKS.partitioner
+  extensions          = FONTMIRROR.CFG.set_or_get 'extensions'
+  pattern             = PATH.join source_path, "/**/*.+(#{extensions})"
+  paths               = ( require 'glob' ).sync pattern
+  paths_by_fontnicks  = {}
+  #.........................................................................................................
+  for path in paths
+    name      = PATH.basename path
+    fontnick  = FONTMIRROR.NICKS.escape name
+    cache     = paths_by_fontnicks[ fontnick ] ?= []
+    cache.push name
+  #.........................................................................................................
+  for fontnick, cache of paths_by_fontnicks
+    #.......................................................................................................
+    if cache.length is 1
+      paths_by_fontnicks[ fontnick ] = cache[ 0 ]
+      continue
+    if cache.length > 25
+      throw new Error "^fontmirror/tags@4443^ too many paths for fontnick #{rpr fontnick}: #{rpr cache}"
+    #.......................................................................................................
+    delete paths_by_fontnicks[ fontnick ]
+    for path, idx in cache
+      new_fontnick = fontnick + partitioner + String.fromCodePoint 0x41 + idx
+      paths_by_fontnicks[ new_fontnick ] = path
+  #.........................................................................................................
+  for fontnick, path of paths_by_fontnicks
+    echo ( CND.white ( fontnick + ':' ).padEnd 70 ), ( CND.lime path )
+    continue if dry
+    @_symlink
+  #.........................................................................................................
+  if dry
+    echo CND.grey "dry run; no links have been written"
   return null
 
 
