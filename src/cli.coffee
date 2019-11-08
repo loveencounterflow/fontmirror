@@ -33,15 +33,13 @@ PATH                      = require 'path'
 #...........................................................................................................
 # require                   './exception-handler'
 
+# sync_command = ( P... ) -> info 'sync_command'
+# async_command = ( P... ) -> new Promise ( resolve ) =>
+#   setTimeout ( -> resolve() ), 1000
+#   info 'async_command'
 
 #-----------------------------------------------------------------------------------------------------------
-@cli = ->
-  ###
-  fontmirror source [source_path] # (set or get)
-  fontmirror target [target_path] # (set or get) where to write links, outlines (defaults to CWD)
-  fontmirror refresh-tags
-  fontmirror cache-outlines --target [target_path]
-  ###
+@cli = -> new Promise ( done ) =>
   FONTMIRROR  = require '..'
   app         = require 'commander'
   has_command = false
@@ -55,6 +53,7 @@ PATH                      = require 'path'
     .action ( source_path, d ) =>
       has_command = true
       FONTMIRROR.CFG.show_cfg()
+      done()
   #.........................................................................................................
   app
     .command 'source [source_path]'
@@ -63,6 +62,7 @@ PATH                      = require 'path'
       has_command = true
       source_path = PATH.resolve source_path if source_path?
       FONTMIRROR.CFG.set_or_get 'source_path', source_path, true
+      done()
   #.........................................................................................................
   app
     .command 'target [target_path]'
@@ -80,6 +80,7 @@ PATH                      = require 'path'
       has_command = true
       dry         = d.dry ? false
       FONTMIRROR.TAGS.link_all_sources dry
+      done()
   #.........................................................................................................
   app
     .command 'refresh-tags'
@@ -87,6 +88,7 @@ PATH                      = require 'path'
     .action ( d ) =>
       has_command = true
       FONTMIRROR.TAGS.refresh()
+      done()
   #.........................................................................................................
   app
     .command 'cache-outlines [tags]'
@@ -97,6 +99,25 @@ PATH                      = require 'path'
       force_overwrite = d.force ? false
       info '^33332^', "cache", force_overwrite
       # await FONTMIRROR.cache_font_outlines source_path, target_path, force_overwrite
+      done()
+  ###
+  #.........................................................................................................
+  app
+    .command 'sync'
+    .action ( d ) =>
+      has_command     = true
+      sync_command()
+      help 'ok'
+      done()
+  #.........................................................................................................
+  app
+    .command 'async'
+    .action ( d ) =>
+      has_command     = true
+      await async_command()
+      help 'ok'
+      done()
+  ###
   #.........................................................................................................
   app.parse process.argv
   unless has_command
@@ -108,6 +129,6 @@ PATH                      = require 'path'
 
 ############################################################################################################
 if require.main is module then do =>
-  @cli()
-
+  await @cli()
+  help "^fontmirror/cli@43892^ terminating."
 
