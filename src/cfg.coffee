@@ -37,7 +37,7 @@ cfg                       = new ( require 'configstore' ) @name, defaults
 ### TAINT consider to move this to types module ###
 key_infos =
   extensions:
-    type:       'nonempty_string'
+    type:       'nonempty_text'
   source_path:
     type:       'fontmirror_existing_folder'
   target_path:
