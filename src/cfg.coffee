@@ -26,6 +26,7 @@ PATH                      = require 'path'
 defaults  =
   source_path:  null
   target_path:  process.cwd()
+  extensions:   'otf|ttf|woff|woff2|ttc'
 #...........................................................................................................
 package_json              = require '../package.json'
 @name                     = package_json.name
@@ -34,17 +35,27 @@ cfg                       = new ( require 'configstore' ) @name, defaults
 
 #-----------------------------------------------------------------------------------------------------------
 ### TAINT consider to move this to types module ###
-types_by_keys =
-  source_path:  'fontmirror_existing_folder'
-  target_path:  'fontmirror_existing_folder'
+key_infos =
+  extensions:
+    type:       'nonempty_string'
+  source_path:
+    type:       'fontmirror_existing_folder'
+  target_path:
+    type:       'fontmirror_existing_folder'
+
 
 #-----------------------------------------------------------------------------------------------------------
 @set_or_get = ( key, value, display ) ->
+  unless ( key_info = key_infos[ key ] )?
+    throw new Error "^fontmirror/cfg@3782^ unknown key #{rpr key}"
+  type = key_info.type ? null
   if value isnt undefined
-    validate[ type ] value if ( type = types_by_keys[ key ] )?
+    validate[ type ] value if type?
+    R = cfg.set key, value
     whisper "fontmirror #{key} set to #{jr value}" if display
-    return cfg.set key, value
+    return R
   R = ( cfg.get key ) ? null
+  validate[ type ] value if type?
   info "fontmirror #{key}: #{jr R}" if display
   return R
 
@@ -54,3 +65,9 @@ types_by_keys =
   for key, value of cfg.all
     info ( CND.white ( key + ':' ).padEnd 50 ), ( CND.lime value )
   return null
+
+# ############################################################################################################
+# if require.main is module then do =>
+#   debug '^334521^'
+
+
