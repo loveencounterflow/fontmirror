@@ -55,7 +55,7 @@ key_infos =
     whisper "fontmirror #{key} set to #{jr value}" if display
     return R
   R = ( cfg.get key ) ? null
-  validate[ type ] value if type?
+  validate[ type ] R if type?
   info "fontmirror #{key}: #{jr R}" if display
   return R
 
@@ -65,6 +65,7 @@ key_infos =
   for key, value of cfg.all
     info ( CND.white ( key + ':' ).padEnd 50 ), ( CND.lime value )
   return null
+
 
 # ############################################################################################################
 # if require.main is module then do =>
