@@ -61,7 +61,7 @@ PATH                      = require 'path'
     .action ( source_path, d ) =>
       has_command = true
       source_path = PATH.resolve source_path if source_path?
-      FONTMIRROR.CFG.set_or_get 'source_path', source_path, true
+      await FONTMIRROR.CFG.set_or_get 'source_path', source_path, true
       done()
   #.........................................................................................................
   app
@@ -70,7 +70,8 @@ PATH                      = require 'path'
     .action ( target_path, d ) =>
       has_command = true
       target_path = PATH.resolve target_path if target_path?
-      FONTMIRROR.CFG.set_or_get 'target_path', target_path, true
+      await FONTMIRROR.CFG.set_or_get 'target_path', target_path, true
+      done()
   #.........................................................................................................
   app
     .command 'link-all-sources'
@@ -79,7 +80,7 @@ PATH                      = require 'path'
     .action ( d ) =>
       has_command = true
       dry         = d.dry ? false
-      FONTMIRROR.TAGS.link_all_sources dry
+      await FONTMIRROR.TAGS.link_all_sources dry
       done()
   #.........................................................................................................
   app
@@ -87,7 +88,7 @@ PATH                      = require 'path'
     .description "rewrite tagged links as described in target/cfg/tags.txt"
     .action ( d ) =>
       has_command = true
-      FONTMIRROR.TAGS.refresh()
+      await FONTMIRROR.TAGS.refresh()
       done()
   #.........................................................................................................
   app
