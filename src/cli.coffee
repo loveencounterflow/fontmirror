@@ -75,9 +75,11 @@ PATH                      = require 'path'
   app
     .command 'link-all-sources'
     .description "rewrite links to fonts in target/all"
+    .option '-d --dry', "show what links would be written"
     .action ( d ) =>
       has_command = true
-      FONTMIRROR.TAGS.link_all_sources()
+      dry         = d.dry ? false
+      FONTMIRROR.TAGS.link_all_sources dry
   #.........................................................................................................
   app
     .command 'refresh-tags'
