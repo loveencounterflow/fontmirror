@@ -35,7 +35,7 @@
     "cnd": "^4.6.0",
     "commander": "^4.0.0",
     "configstore": "^5.0.0",
-    "glob": "^7.1.5",
+    "glob": "^7.1.6",
     "intertype": "^2.5.0",
     "mkdirp": "^0.5.1",
     "multimix": "^2.1.0",
