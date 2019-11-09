@@ -76,11 +76,13 @@ PATH                      = require 'path'
   app
     .command 'link-all-sources'
     .description "rewrite links to fonts in target/all"
-    .option '-d --dry', "show what links would be written"
+    .option '-d --dry',     "show what links would be written"
+    .option '-q --quiet',   "only report totals"
     .action ( d ) =>
       has_command = true
-      dry         = d.dry ? false
-      await FONTMIRROR.TAGS.link_all_sources dry
+      dry         = d.dry     ? false
+      quiet       = d.quiet   ? false
+      await FONTMIRROR.TAGS.link_all_sources { dry, quiet, }
       done()
   #.........................................................................................................
   app
@@ -131,5 +133,5 @@ PATH                      = require 'path'
 ############################################################################################################
 if require.main is module then do =>
   await @cli()
-  help "^fontmirror/cli@43892^ terminating."
+  # help "^fontmirror/cli@43892^ terminating."
 
