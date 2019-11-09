@@ -82,7 +82,7 @@ PATH                      = require 'path'
       has_command = true
       dry         = d.dry     ? false
       quiet       = d.quiet   ? false
-      await FONTMIRROR.TAGS.link_all_sources { dry, quiet, }
+      await FONTMIRROR.LINKS.link_all_sources { dry, quiet, }
       done()
   #.........................................................................................................
   app
