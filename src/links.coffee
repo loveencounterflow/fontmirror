@@ -35,6 +35,7 @@ package_json              = require '../package.json'
 @version                  = package_json.version
 cfg                       = new ( require 'configstore' ) @name, defaults
 trash                     = require 'trash'
+glob                      = require 'glob'
 
 #-----------------------------------------------------------------------------------------------------------
 @_lstat_safe = ( path ) ->
@@ -84,15 +85,28 @@ trash                     = require 'trash'
   return 1
 
 #-----------------------------------------------------------------------------------------------------------
+@_list_links = ( path ) ->
+  return ( x for x in glob.sync PATH.join path, '*' when ( @_lstat_safe x )?.isSymbolicLink() ? false )
+
+#-----------------------------------------------------------------------------------------------------------
+@_list_all_fontnicks = ->
+  ### TAINT pass in state object instead of re-computing ###
+  FONTMIRROR          = require '..'
+  target_path         = FONTMIRROR.CFG.set_or_get 'target_path'
+  path_to_fontnicks   = PATH.join target_path, 'all'
+  return ( PATH.basename x for x in FONTMIRROR.LINKS._list_links path_to_fontnicks )
+
+#-----------------------------------------------------------------------------------------------------------
 @link_all_sources = ( settings ) ->
   validate.fontmirror_cli_command_settings settings
+  debug '^43736^', settings; xxx
   FONTMIRROR          = require '..'
   source_path         = FONTMIRROR.CFG.set_or_get 'source_path'
   target_path         = FONTMIRROR.CFG.set_or_get 'target_path'
   partitioner         = FONTMIRROR.NICKS.partitioner
   extensions          = FONTMIRROR.CFG.set_or_get 'extensions'
-  pattern             = PATH.join source_path, "/**/*.+(#{extensions})"
-  paths               = ( require 'glob' ).sync pattern
+  pattern             = PATH.join source_path, "**/*.+(#{extensions})"
+  paths               = glob.sync pattern
   paths_by_fontnicks  = {}
   links_home          = PATH.join target_path, 'all'
   font_count          = 0
