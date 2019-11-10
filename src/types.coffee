@@ -54,11 +54,16 @@ FS                        = require 'fs'
     "x.target_path is a nonempty_text":       ( x ) -> @isa.nonempty_text       x.target_path
 
 #-----------------------------------------------------------------------------------------------------------
-@declare 'fontmirror_cli_command_settings',
+@declare 'fontmirror_tagger_job_settings',
   tests:
     "x is a object":                          ( x ) -> @isa.object  x
     "x.dry is a boolean":                     ( x ) -> @isa.boolean x.dry
     "x.quiet is a boolean":                   ( x ) -> @isa.boolean x.quiet
+
+#-----------------------------------------------------------------------------------------------------------
+@declare 'fontmirror_fontfile_extensions', ( x ) ->
+    return false unless @isa.list x
+    return x.every ( e ) => @isa.nonempty_text e
 
 # #-----------------------------------------------------------------------------------------------------------
 # @declare 'fontmirror_web_layout_SLUG_settings',
@@ -136,3 +141,8 @@ L = @
 # #-----------------------------------------------------------------------------------------------------------
 # @declare 'true', ( x ) -> x is true
 
+#-----------------------------------------------------------------------------------------------------------
+@defaults =
+  fontmirror_cli_command_settings:
+    dry:          false
+    quiet:        false
