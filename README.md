@@ -182,7 +182,7 @@ This file is roughly partitioned into groups, sometimes with a code comment like
 it, but keep in mind this is only dony by and for the author, as tag groups do not formally exist in FM.
 
 The reader may notice the exclamation signs in some tags: there's `+medium` but `+heavy!`, `+ming!` next to
-`+kai` and so forth: these denote cherry-picked tags, to which we come back mementarily.
+`+kai` and so forth: these denote cherry-picked tags, to which we come back momentarily.
 
 From the above data—the catalog of font files derived from a source location, the tag vocabulary, and the
 associations between fonts and tags, FontMirror can now proceed to produce the catalog proper, which will be
