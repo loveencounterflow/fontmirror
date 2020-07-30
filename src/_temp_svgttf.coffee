@@ -32,7 +32,6 @@ jr                        = JSON.stringify
   size_of
   type_of }               = require './types'
 #...........................................................................................................
-require                   './exception-handler'
 OT                        = require 'opentype.js'
 
 

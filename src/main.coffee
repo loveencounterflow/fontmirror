@@ -32,7 +32,6 @@ PATH                      = require 'path'
   type_of }               = @types
 #...........................................................................................................
 glob                      = require 'glob'
-require                   './exception-handler'
 Multimix                  = require 'multimix'
 TEXFONTNAMESAKE           = require './texfontnamesake'
 fontfile_extensions       = 'otf|ttf|woff|woff2|ttc'
