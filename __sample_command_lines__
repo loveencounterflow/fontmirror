@@ -1,0 +1,16 @@
+async|cache-outlines|cfg|link-all-sources|refresh-tags|source|sync|target|
+
+ 4349  node apps/fontmirror/lib/cli.js target
+ 4351  node apps/fontmirror/lib/cli.js target assets/fontmirror/fmcatalog
+ 4353  less -SRN +109 apps/fontmirror/lib/cfg.js
+ 4356  node apps/fontmirror/lib/cfg.js
+ 4366  node apps/fontmirror/lib/cli.js async
+ 4374  node apps/fontmirror/lib/cli.js cfg
+ 4376  node apps/fontmirror/lib/cli.js link-all-sources --quiet
+ 4377  node apps/fontmirror/lib/cli.js link-all-sources
+ 4378  node apps/fontmirror/lib/cli.js link-all-sources --quiet --dry
+ 4392  node --async-stack-traces --detailed-error-stack-trace --stack-trace-limit=100 apps/fontmirror/lib/cli.js refresh-tags
+ 4393  node apps/fontmirror/lib/cli.js refresh-tags
+ 4396  node apps/fontmirror/lib/cli.js refresh-tags --dry
+ 4405  node apps/fontmirror/lib/cli.js link-all-sources --dry
+ 4438  node lib/fontmirror/fontmirror-demo.js refresh-tags

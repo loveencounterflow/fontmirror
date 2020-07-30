@@ -25,24 +25,20 @@ PATH                      = require 'path'
 #   here_abspath
 #   _drop_extension
 #   project_abspath }       = require './helpers'
-@types                    = require './types'
+types                     = require './types'
 { isa
   validate
   cast
-  type_of }               = @types
-#...........................................................................................................
-# require                   './exception-handler'
+  defaults
+  type_of }               = types
 
-# sync_command = ( P... ) -> info 'sync_command'
-# async_command = ( P... ) -> new Promise ( resolve ) =>
-#   setTimeout ( -> resolve() ), 1000
-#   info 'async_command'
 
 #-----------------------------------------------------------------------------------------------------------
 @cli = -> new Promise ( done ) =>
   FONTMIRROR  = require '..'
   app         = require 'commander'
   has_command = false
+  #.........................................................................................................
   app
     .name     FONTMIRROR.CFG.name
     .version  FONTMIRROR.CFG.version
@@ -80,17 +76,20 @@ PATH                      = require 'path'
     .option '-q --quiet',   "only report totals"
     .action ( d ) =>
       has_command = true
-      dry         = d.dry     ? false
-      quiet       = d.quiet   ? false
-      await FONTMIRROR.LINKS.link_all_sources { dry, quiet, }
+      me          = @new_tagger d
+      await FONTMIRROR.LINKS.link_all_sources me
       done()
   #.........................................................................................................
   app
     .command 'refresh-tags'
     .description "rewrite tagged links as described in target/cfg/tags.txt"
+    .option '-d --dry',     "show what links would be written"
+    .option '-q --quiet',   "only report totals"
     .action ( d ) =>
       has_command = true
-      await FONTMIRROR.TAGS.refresh()
+      me          = FONTMIRROR.CFG.new_tagger d
+      debug '^33653^', me; process.exit 1
+      await FONTMIRROR.TAGS.refresh me
       done()
   #.........................................................................................................
   app
